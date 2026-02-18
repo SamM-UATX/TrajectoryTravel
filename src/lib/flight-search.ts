@@ -82,7 +82,7 @@ function mockFlights(params: FlightSearchParams): FlightOption[] {
 
 export async function searchFlights(params: FlightSearchParams): Promise<FlightOption[]> {
   const originCode = getAirportCode(params.origin);
-  const dest = typeof params.destination === 'string' ? params.destination : params.destination;
+  const dest = params.destination;
   const destCode = getAirportCode(dest);
 
   if (process.env.AMADEUS_API_KEY && process.env.AMADEUS_API_SECRET) {

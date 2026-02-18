@@ -39,7 +39,6 @@ export interface AmadeusFlightOption {
   price: number;
   class: string;
   stops: number;
-  deepLink?: string;
 }
 
 export async function searchAmadeusFlights(
@@ -84,7 +83,6 @@ export async function searchAmadeusFlights(
       price: Math.round(parseFloat(price)),
       class: cabin,
       stops: Math.max(0, segments.length - 1),
-      deepLink: (o.instantTicketingRequired as boolean) ? undefined : undefined,
     };
   });
 }
