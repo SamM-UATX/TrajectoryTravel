@@ -186,9 +186,15 @@ export default function TripRequestForm({ onSubmit, isLoading }: TripRequestForm
             type="number"
             min={1}
             max={20}
+            inputMode="numeric"
             value={formData.travelers}
-            onChange={e => setFormData({ ...formData, travelers: parseInt(e.target.value, 10) || 1 })}
-            className="w-full px-4 py-3 bg-white border border-cloud-gray-dark rounded-xl text-ink focus:ring-2 focus:ring-navy/30 focus:border-navy"
+            onChange={e => {
+              const v = e.target.value;
+              if (v === '') return setFormData({ ...formData, travelers: 1 });
+              const n = parseInt(v, 10);
+              if (!isNaN(n) && n >= 1 && n <= 20) setFormData({ ...formData, travelers: n });
+            }}
+            className="w-full px-4 py-3 bg-white border border-cloud-gray-dark rounded-xl text-ink focus:ring-2 focus:ring-navy/30 focus:border-navy [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
         </div>
       </div>

@@ -40,7 +40,9 @@ export interface ItineraryItem {
   confirmationCode?: string;
   editable: boolean;
   metadata?: Record<string, unknown>;
-  url?: string;  // Clickable link to booking/review page
+  url?: string;
+  imageUrl?: string;
+  detail?: string;  // Short line below item (e.g. "Book at Google Flights")
 }
 
 export interface DayPlan {

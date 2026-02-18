@@ -41,14 +41,21 @@ export default function ItineraryItemCard({ item, onEdit, onRemove, isEditing }:
       className={`group relative p-4 rounded-xl ${colorClass} border shadow-sm transition-all hover:shadow-md hover:scale-[1.01]`}
     >
       <div className="flex gap-4">
-        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-navy/15 flex items-center justify-center">
-          <Icon className="w-5 h-5 text-navy" />
+        <div className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden bg-navy/10 flex items-center justify-center">
+          {item.imageUrl ? (
+            <img src={item.imageUrl} alt="" className="w-full h-full object-cover" />
+          ) : (
+            <Icon className="w-6 h-6 text-navy" />
+          )}
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
             <div>
               <h4 className="font-semibold text-ink">{item.title}</h4>
               <p className="text-sm text-ink/70 mt-0.5">{item.description}</p>
+              {item.detail && (
+                <p className="text-xs text-ink/70 mt-1">{item.detail}</p>
+              )}
               {(item.time || item.duration || item.location || (item.metadata as { rating?: number })?.rating) && (
                 <div className="flex gap-3 mt-2 text-xs text-ink/60 flex-wrap items-center">
                   {item.time && <span>{item.time}</span>}
@@ -76,7 +83,7 @@ export default function ItineraryItemCard({ item, onEdit, onRemove, isEditing }:
                   onClick={(e) => e.stopPropagation()}
                   className="text-xs text-navy/70 mt-1 flex items-center justify-end gap-1 hover:text-navy hover:underline"
                 >
-                  <ExternalLink className="w-3 h-3" /> View & book
+                  <ExternalLink className="w-3 h-3" /> {item.detail || 'View & book'}
                 </a>
               )}
               {item.confirmationCode && (

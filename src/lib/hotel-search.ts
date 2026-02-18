@@ -14,6 +14,7 @@ export interface HotelOption {
   amenities?: string[];
   location?: string;
   url?: string;
+  imageUrl?: string;
 }
 
 export interface HotelSearchParams {
@@ -44,13 +45,16 @@ function getCityCode(city: string): string {
   return CITY_TO_IATA[n] || Object.entries(CITY_TO_IATA).find(([k]) => n.includes(k))?.[1] || 'LON';
 }
 
+const HOTEL_IMAGE = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&q=80';
+
 function mockHotels(params: HotelSearchParams): HotelOption[] {
   const base = params.budgetLevel === 'budget' ? 80 : params.budgetLevel === 'luxury' ? 350 : 180;
   const nights = Math.ceil((new Date(params.checkOut).getTime() - new Date(params.checkIn).getTime()) / 86400000) || 1;
+  const bookingUrl = `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(params.location)}`;
   return [
-    { id: '1', name: 'Central Hotel', rating: 4.6, reviewCount: 1200, pricePerNight: Math.round(base * 1.2), url: 'https://www.booking.com' },
-    { id: '2', name: 'Riverside Inn', rating: 4.4, reviewCount: 890, pricePerNight: Math.round(base), url: 'https://www.booking.com' },
-    { id: '3', name: 'Heritage Suites', rating: 4.8, reviewCount: 2100, pricePerNight: Math.round(base * 1.5), url: 'https://www.booking.com' },
+    { id: '1', name: 'Central Hotel', rating: 4.6, reviewCount: 1200, pricePerNight: Math.round(base * 1.2), url: bookingUrl, imageUrl: HOTEL_IMAGE },
+    { id: '2', name: 'Riverside Inn', rating: 4.4, reviewCount: 890, pricePerNight: Math.round(base), url: bookingUrl, imageUrl: HOTEL_IMAGE },
+    { id: '3', name: 'Heritage Suites', rating: 4.8, reviewCount: 2100, pricePerNight: Math.round(base * 1.5), url: bookingUrl, imageUrl: HOTEL_IMAGE },
   ];
 }
 
@@ -94,6 +98,7 @@ export async function searchHotels(params: HotelSearchParams): Promise<HotelOpti
       }
     }
 
+    const hotelImg = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&q=80';
     let hotels: HotelOption[] = hotelList.slice(0, 10).map((h: { hotelId?: string; name?: string }) => {
       const r = ratingsMap[h.hotelId || ''] || {};
       return {
@@ -102,6 +107,7 @@ export async function searchHotels(params: HotelSearchParams): Promise<HotelOpti
         rating: r.rating || undefined,
         reviewCount: r.reviewCount || undefined,
         url: `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(h.name || '')}+${encodeURIComponent(params.location)}`,
+        imageUrl: hotelImg,
       };
     });
 

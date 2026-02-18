@@ -86,6 +86,7 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
   const outboundFlightPrice = selectedFlight?.price ?? Math.round((400 + Math.random() * 600) * multiplier * tripRequest.travelers);
   totalPrice += outboundFlightPrice;
 
+  const flightUrl = selectedFlight?.url || `https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(primaryDestination)}`;
   const day0Items: ItineraryItem[] = [
     {
       id: randomId(),
@@ -102,7 +103,9 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       duration: selectedFlight?.duration ?? '8h 45m',
       provider: selectedFlight?.airline,
       editable: true,
-      url: selectedFlight?.url || `https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(primaryDestination)}`,
+      url: flightUrl,
+      imageUrl: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=80',
+      detail: 'Book flights at Google Flights',
     },
     {
       id: randomId(),
@@ -116,6 +119,8 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       currency: 'USD',
       duration: '45m',
       editable: true,
+      imageUrl: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=400&q=80',
+      detail: 'Pre-book airport transfers for a smooth arrival',
     },
     {
       id: randomId(),
@@ -132,7 +137,9 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       duration: `${totalDays} nights`,
       editable: true,
       metadata: selectedHotel ? { rating: selectedHotel.rating, reviewCount: selectedHotel.reviewCount } : undefined,
-      url: selectedHotel?.url,
+      url: selectedHotel?.url || `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(primaryDestination)}`,
+      imageUrl: selectedHotel?.imageUrl,
+      detail: 'Compare prices and book on Booking.com',
     },
   ];
   totalPrice += day0Items[1].price + day0Items[2].price;
@@ -159,7 +166,8 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
 
     const dayItems: ItineraryItem[] = [];
 
-    const breakfast = restaurants[Math.floor(Math.random() * Math.min(restaurants.length, 5))] || { name: FALLBACK_RESTAURANTS[0], rating: 4.5, reviewCount: 0, url: '', price: '' };
+    const breakfastIdx = restaurants.length > 0 ? Math.floor(Math.random() * restaurants.length) : 0;
+    const breakfast = restaurants[breakfastIdx] || { name: FALLBACK_RESTAURANTS[0], rating: 4.5, reviewCount: 0, url: `https://www.yelp.com/search?find_desc=restaurants&find_loc=${encodeURIComponent(dayLocation)}`, price: '', imageUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=400&q=80' };
     dayItems.push({
       id: randomId(),
       type: 'meal',
@@ -171,7 +179,9 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       price: Math.round((15 + Math.random() * 25) * multiplier),
       currency: 'USD',
       editable: true,
-      url: breakfast.url || undefined,
+      url: breakfast.url || `https://www.yelp.com/search?find_desc=restaurants&find_loc=${encodeURIComponent(dayLocation)}`,
+      imageUrl: breakfast.imageUrl,
+      detail: 'Find reviews and reserve on Yelp',
     });
 
     const activityTitle = dayActivities[Math.floor(Math.random() * Math.min(dayActivities.length, 4))] || activities[0];
@@ -190,6 +200,9 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
         currency: 'USD',
         duration: '1-2h each way',
         editable: true,
+        imageUrl: 'https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=400&q=80',
+        detail: 'Book train tickets at Trainline or national rail providers',
+        url: 'https://www.thetrainline.com/',
       });
       totalPrice += trainPrice;
     }
@@ -206,9 +219,13 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       currency: 'USD',
       duration: '3h',
       editable: true,
+      imageUrl: 'https://images.unsplash.com/photo-1523531294919-4fcd27459059?w=400&q=80',
+      detail: 'Book tours and experiences on GetYourGuide or Viator',
+      url: 'https://www.getyourguide.com/',
     });
 
-    const lunch = restaurants[Math.floor(Math.random() * Math.min(restaurants.length, 5)) + 1] || restaurants[0] || { name: FALLBACK_RESTAURANTS[1], rating: 4.3, reviewCount: 0, url: '' };
+    const lunchIdx = restaurants.length > 1 ? (Math.floor(Math.random() * restaurants.length) + 1) % restaurants.length : 0;
+    const lunch = restaurants[lunchIdx] || { name: FALLBACK_RESTAURANTS[1], rating: 4.3, reviewCount: 0, url: `https://www.yelp.com/search?find_desc=restaurants&find_loc=${encodeURIComponent(dayLocation)}`, imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&q=80' };
     dayItems.push({
       id: randomId(),
       type: 'meal',
@@ -220,10 +237,13 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       price: Math.round((25 + Math.random() * 40) * multiplier),
       currency: 'USD',
       editable: true,
-      url: lunch.url || undefined,
+      url: lunch.url || `https://www.yelp.com/search?find_desc=restaurants&find_loc=${encodeURIComponent(dayLocation)}`,
+      imageUrl: lunch.imageUrl,
+      detail: 'Find reviews and reserve on Yelp',
     });
 
-    const dinner = restaurants[Math.floor(Math.random() * Math.min(restaurants.length, 5)) + 2] || restaurants[1] || { name: FALLBACK_RESTAURANTS[2], rating: 4.6, reviewCount: 0, url: '' };
+    const dinnerIdx = restaurants.length > 1 ? (Math.floor(Math.random() * restaurants.length) + 2) % restaurants.length : 0;
+    const dinner = restaurants[dinnerIdx] || { name: FALLBACK_RESTAURANTS[2], rating: 4.6, reviewCount: 0, url: `https://www.yelp.com/search?find_desc=restaurants&find_loc=${encodeURIComponent(dayLocation)}`, imageUrl: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?w=400&q=80' };
     dayItems.push({
       id: randomId(),
       type: 'meal',
@@ -235,7 +255,9 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       price: Math.round((50 + Math.random() * 100) * multiplier),
       currency: 'USD',
       editable: true,
-      url: dinner.url || undefined,
+      url: dinner.url || `https://www.yelp.com/search?find_desc=restaurants&find_loc=${encodeURIComponent(dayLocation)}`,
+      imageUrl: dinner.imageUrl,
+      detail: 'Find reviews and reserve on Yelp',
     });
 
     dayItems.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
@@ -269,6 +291,8 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       provider: selectedFlight?.airline,
       editable: true,
       url: selectedFlight?.url || `https://www.google.com/travel/flights?q=Flights%20from%20${encodeURIComponent(primaryDestination)}`,
+      imageUrl: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&q=80',
+      detail: 'Book flights at Google Flights',
     });
   }
 
@@ -283,6 +307,8 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       price: Math.round(75 * tripRequest.travelers),
       currency: 'USD',
       editable: true,
+      url: 'https://www.squaremouth.com/',
+      detail: 'Compare prices at Squaremouth',
     },
     {
       id: randomId(),
@@ -293,8 +319,10 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       price: 35,
       currency: 'USD',
       editable: true,
+      url: 'https://www.airalo.com/',
+      detail: 'Get eSIM plans at Airalo',
     },
-    ...regionalStops.slice(0, 2).map((stop, i) => ({
+    ...regionalStops.slice(0, 2).map((stop) => ({
       id: randomId(),
       type: 'recommendation' as const,
       title: `Don't miss: ${stop.popularActivities[0] || stop.name}`,
@@ -303,6 +331,8 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       price: 0,
       currency: 'USD' as const,
       editable: false,
+      url: 'https://www.getyourguide.com/',
+      detail: 'Book tours and experiences',
     })),
   ];
   totalPrice += recs[0].price + recs[1].price;
