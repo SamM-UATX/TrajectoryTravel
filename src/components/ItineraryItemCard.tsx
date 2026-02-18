@@ -1,7 +1,7 @@
 'use client';
 
 import { ItineraryItem } from '@/types/trip';
-import { Plane, Hotel, Train, Car, Utensils, MapPin, Bus, Sparkles } from 'lucide-react';
+import { Plane, Hotel, Train, Car, Utensils, MapPin, Bus, Sparkles, ExternalLink } from 'lucide-react';
 
 const typeIcons: Record<string, React.ElementType> = {
   flight: Plane,
@@ -68,6 +68,17 @@ export default function ItineraryItemCard({ item, onEdit, onRemove, isEditing }:
               <span className="font-bold text-navy">
                 ${item.price.toLocaleString()}
               </span>
+              {item.url && (
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  className="text-xs text-navy/70 mt-1 flex items-center justify-end gap-1 hover:text-navy hover:underline"
+                >
+                  <ExternalLink className="w-3 h-3" /> View & book
+                </a>
+              )}
               {item.confirmationCode && (
                 <p className="text-xs text-emerald-600 mt-1">#{item.confirmationCode}</p>
               )}

@@ -1,23 +1,19 @@
 /**
- * Hotel Search Service
- * 
- * Simulates hotel search with ratings from customer reviews.
- * In production, integrate with:
- * - Booking.com API (requires partnership)
- * - Hotels.com API
- * - Amadeus Hotel API
- * - Aggregate reviews from TripAdvisor, Google, Facebook (via their APIs)
+ * Hotel Search - uses Amadeus API when keys are set
+ * Sorted by rating (highest first)
  */
+
+import { getAmadeusToken } from './amadeus';
 
 export interface HotelOption {
   id: string;
   name: string;
-  rating: number;
-  reviewCount: number;
-  pricePerNight: number;
-  amenities: string[];
-  location: string;
-  imageUrl?: string;
+  rating?: number;
+  reviewCount?: number;
+  pricePerNight?: number;
+  amenities?: string[];
+  location?: string;
+  url?: string;
 }
 
 export interface HotelSearchParams {
@@ -28,48 +24,114 @@ export interface HotelSearchParams {
   budgetLevel: 'budget' | 'moderate' | 'luxury';
 }
 
-// Simulated hotel data with realistic ratings (as would come from TripAdvisor, Google, Facebook aggregates)
-const HOTEL_TEMPLATES: Record<string, Omit<HotelOption, 'id' | 'pricePerNight'>[]> = {
-  default: [
-    { name: 'The Grand Plaza', rating: 4.8, reviewCount: 2341, amenities: ['Pool', 'Spa', 'Free WiFi'], location: 'City Center' },
-    { name: 'Riverside Inn', rating: 4.5, reviewCount: 892, amenities: ['Breakfast', 'Parking'], location: 'Waterfront' },
-    { name: 'Heritage Hotel', rating: 4.7, reviewCount: 1567, amenities: ['Restaurant', 'Gym', 'Bar'], location: 'Historic District' },
-    { name: 'Urban Loft Suites', rating: 4.3, reviewCount: 445, amenities: ['Kitchen', 'Workspace'], location: 'Downtown' },
-    { name: 'Garden View Resort', rating: 4.6, reviewCount: 2103, amenities: ['Garden', 'Pool', 'Spa'], location: 'Outskirts' },
-  ],
-  london: [
-    { name: 'The Savoy', rating: 4.9, reviewCount: 4521, amenities: ['Spa', 'Michelin Restaurant', 'River View'], location: 'Strand' },
-    { name: 'Claridge\'s', rating: 4.8, reviewCount: 3201, amenities: ['Afternoon Tea', 'Spa', 'Bar'], location: 'Mayfair' },
-    { name: 'The Z Hotel', rating: 4.4, reviewCount: 1892, amenities: ['Free WiFi', 'Complimentary Wine'], location: 'Soho' },
-    { name: 'CitizenM Bankside', rating: 4.5, reviewCount: 2341, amenities: ['Rooftop Bar', '24/7 Food'], location: 'Southwark' },
-  ],
-  paris: [
-    { name: 'Le Bristol Paris', rating: 4.9, reviewCount: 2890, amenities: ['Spa', '3 Michelin Stars', 'Garden'], location: 'Faubourg Saint-Honoré' },
-    { name: 'Hôtel du Louvre', rating: 4.6, reviewCount: 3421, amenities: ['Museum Views', 'Restaurant'], location: '1st Arrondissement' },
-    { name: 'Le Marais Boutique', rating: 4.5, reviewCount: 1567, amenities: ['Historic Building', 'Courtyard'], location: 'Le Marais' },
-  ],
+const CITY_TO_IATA: Record<string, string> = {
+  london: 'LON', england: 'LON', uk: 'LON',
+  paris: 'PAR', france: 'PAR',
+  rome: 'ROM', italy: 'ROM', florence: 'FLR', venice: 'VCE',
+  barcelona: 'BCN', madrid: 'MAD', spain: 'BCN',
+  tokyo: 'TYO', japan: 'TYO', kyoto: 'KYO', osaka: 'OSA',
+  'new york': 'NYC', nyc: 'NYC',
+  amsterdam: 'AMS', berlin: 'BER',
+  athens: 'ATH', greece: 'ATH', santorini: 'JTR',
+  cairo: 'CAI', egypt: 'CAI',
+  lima: 'LIM', peru: 'LIM', cusco: 'CUZ',
+  sydney: 'SYD', australia: 'SYD',
+  dubai: 'DXB', singapore: 'SIN',
 };
 
-function getHotelsForLocation(location: string): Omit<HotelOption, 'id' | 'pricePerNight'>[] {
-  const normalized = location.toLowerCase();
-  if (normalized.includes('london') || normalized.includes('england') || normalized.includes('uk')) {
-    return HOTEL_TEMPLATES.london;
-  }
-  if (normalized.includes('paris') || normalized.includes('france')) {
-    return HOTEL_TEMPLATES.paris;
-  }
-  return HOTEL_TEMPLATES.default;
+function getCityCode(city: string): string {
+  const n = city.toLowerCase().trim();
+  return CITY_TO_IATA[n] || Object.entries(CITY_TO_IATA).find(([k]) => n.includes(k))?.[1] || 'LON';
+}
+
+function mockHotels(params: HotelSearchParams): HotelOption[] {
+  const base = params.budgetLevel === 'budget' ? 80 : params.budgetLevel === 'luxury' ? 350 : 180;
+  const nights = Math.ceil((new Date(params.checkOut).getTime() - new Date(params.checkIn).getTime()) / 86400000) || 1;
+  return [
+    { id: '1', name: 'Central Hotel', rating: 4.6, reviewCount: 1200, pricePerNight: Math.round(base * 1.2), url: 'https://www.booking.com' },
+    { id: '2', name: 'Riverside Inn', rating: 4.4, reviewCount: 890, pricePerNight: Math.round(base), url: 'https://www.booking.com' },
+    { id: '3', name: 'Heritage Suites', rating: 4.8, reviewCount: 2100, pricePerNight: Math.round(base * 1.5), url: 'https://www.booking.com' },
+  ];
 }
 
 export async function searchHotels(params: HotelSearchParams): Promise<HotelOption[]> {
-  const hotels = getHotelsForLocation(params.location);
-  const nights = Math.ceil((new Date(params.checkOut).getTime() - new Date(params.checkIn).getTime()) / (1000 * 60 * 60 * 24));
-  
-  const basePrice = params.budgetLevel === 'budget' ? 80 : params.budgetLevel === 'luxury' ? 350 : 180;
-  
-  return hotels.map((h, i) => ({
-    ...h,
-    id: `hotel-${i}-${Date.now()}`,
-    pricePerNight: Math.round(basePrice * (1 + (h.rating - 4) * 0.3) * (1 + i * 0.1)),
-  }));
+  if (!process.env.AMADEUS_API_KEY || !process.env.AMADEUS_API_SECRET) {
+    await new Promise((r) => setTimeout(r, 400));
+    return mockHotels(params);
+  }
+
+  try {
+    const cityCode = getCityCode(params.location);
+    const token = await getAmadeusToken();
+
+    const listRes = await fetch(
+      `https://api.amadeus.com/v1/reference-data/locations/hotels/by-city?cityCode=${cityCode}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    const listData = await listRes.json();
+    if (!listRes.ok) throw new Error(listData.errors?.[0]?.detail || 'Hotel list failed');
+
+    const hotelList = (listData.data || []).slice(0, 15);
+    const hotelIds = hotelList.map((h: { hotelId?: string }) => h.hotelId).filter(Boolean).slice(0, 10);
+
+    let ratingsMap: Record<string, { rating: number; reviewCount: number }> = {};
+    if (hotelIds.length) {
+      try {
+        const ratingsRes = await fetch(
+          `https://api.amadeus.com/v2/e-reputation/hotel-sentiments?hotelIds=${hotelIds.join(',')}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const ratingsData = await ratingsRes.json();
+        if (ratingsRes.ok && ratingsData.data) {
+          ratingsMap = Object.fromEntries(
+            (ratingsData.data as { hotelId?: string; overallRating?: number; numberOfReviews?: number }[]).map(
+              (r) => [r.hotelId || '', { rating: (r.overallRating || 0) / 20, reviewCount: r.numberOfReviews || 0 }]
+            )
+          );
+        }
+      } catch {
+        /* ratings optional */
+      }
+    }
+
+    let hotels: HotelOption[] = hotelList.slice(0, 10).map((h: { hotelId?: string; name?: string }) => {
+      const r = ratingsMap[h.hotelId || ''] || {};
+      return {
+        id: h.hotelId || '',
+        name: h.name || 'Hotel',
+        rating: r.rating || undefined,
+        reviewCount: r.reviewCount || undefined,
+        url: `https://www.booking.com/searchresults.html?ss=${encodeURIComponent(h.name || '')}+${encodeURIComponent(params.location)}`,
+      };
+    });
+
+    hotels.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+
+    if (params.checkIn && params.checkOut && hotelIds.length) {
+      try {
+        const searchRes = await fetch(
+          `https://api.amadeus.com/v3/shopping/hotel-offers?hotelIds=${hotelIds.slice(0, 5).join(',')}&adults=1&checkInDate=${params.checkIn}&roomQuantity=1`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const searchData = await searchRes.json();
+        if (searchRes.ok && searchData.data?.length) {
+          const nights = Math.ceil((new Date(params.checkOut).getTime() - new Date(params.checkIn).getTime()) / 86400000) || 1;
+          for (const o of searchData.data as { hotel?: { hotelId?: string }; offers?: { price?: { total?: string } }[] }[]) {
+            const total = o.offers?.[0]?.price?.total;
+            if (total && o.hotel?.hotelId) {
+              const h = hotels.find((x) => x.id === o.hotel?.hotelId);
+              if (h) h.pricePerNight = Math.round(parseFloat(total) / nights);
+            }
+          }
+        }
+      } catch {
+        /* prices optional */
+      }
+    }
+
+    return hotels;
+  } catch (err) {
+    console.error('Amadeus hotel search failed, using mock:', err);
+    return mockHotels(params);
+  }
 }

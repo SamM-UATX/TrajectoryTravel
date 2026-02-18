@@ -2,6 +2,7 @@ import { TripRequest, Itinerary, DayPlan, ItineraryItem } from '@/types/trip';
 import { addDays, format, parseISO } from 'date-fns';
 import { searchFlights } from './flight-search';
 import { searchHotels } from './hotel-search';
+import { searchRestaurants } from './restaurant-search';
 import { getRegionalStops } from './regional-tours';
 
 const TRAIN_OPERATORS = ['Eurostar', 'TGV', 'ICE', 'Shinkansen', 'Amtrak', 'Virgin Trains', 'Great Western Railway'];
@@ -15,9 +16,9 @@ const ACTIVITY_BY_INTEREST: Record<string, string[]> = {
   default: ['City walking tour', 'Museum visit', 'Local market exploration', 'Historical site tour'],
 };
 
-const RESTAURANTS = [
-  'Le Petit Bistro', 'The Local Table', 'Rooftop Garden', 'Seaside Grill',
-  'Traditional Taverna', 'Michelin-starred experience', 'Farm-to-table dining',
+const FALLBACK_RESTAURANTS = [
+  'Local Bistro', 'Traditional Kitchen', 'Rooftop Restaurant',
+  'Seaside Grill', 'Farm-to-table dining',
 ];
 
 function randomId(): string {
@@ -72,6 +73,9 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
   });
   const selectedHotel = hotels[0];
 
+  // Fetch real restaurants (Yelp) - sorted by rating
+  const restaurants = await searchRestaurants(primaryDestination, 15);
+
   const regionalStops = getRegionalStops(primaryDestination);
   const activities = getActivitiesForInterests(tripRequest.activities);
 
@@ -98,6 +102,7 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       duration: selectedFlight?.duration ?? '8h 45m',
       provider: selectedFlight?.airline,
       editable: true,
+      url: selectedFlight?.url || `https://www.google.com/travel/flights?q=Flights%20to%20${encodeURIComponent(primaryDestination)}`,
     },
     {
       id: randomId(),
@@ -117,7 +122,7 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       type: 'hotel',
       title: selectedHotel?.name ?? `Hotel in ${primaryDestination}`,
       description: selectedHotel
-        ? `${selectedHotel.rating}★ (${selectedHotel.reviewCount.toLocaleString()} reviews) • ${selectedHotel.amenities.slice(0, 2).join(', ')}`
+        ? `${selectedHotel.rating ? selectedHotel.rating.toFixed(1) + '★' : ''} ${selectedHotel.reviewCount ? `(${selectedHotel.reviewCount.toLocaleString()} reviews)` : ''} ${selectedHotel.amenities?.slice(0, 2).join(', ') || ''}`.trim() || `${totalDays} nights`
         : `${totalDays} nights`,
       date: tripRequest.departureDate,
       time: '19:00',
@@ -127,6 +132,7 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       duration: `${totalDays} nights`,
       editable: true,
       metadata: selectedHotel ? { rating: selectedHotel.rating, reviewCount: selectedHotel.reviewCount } : undefined,
+      url: selectedHotel?.url,
     },
   ];
   totalPrice += day0Items[1].price + day0Items[2].price;
@@ -153,17 +159,19 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
 
     const dayItems: ItineraryItem[] = [];
 
+    const breakfast = restaurants[Math.floor(Math.random() * Math.min(restaurants.length, 5))] || { name: FALLBACK_RESTAURANTS[0], rating: 4.5, reviewCount: 0, url: '', price: '' };
     dayItems.push({
       id: randomId(),
       type: 'meal',
       title: 'Breakfast',
-      description: RESTAURANTS[Math.floor(Math.random() * RESTAURANTS.length)],
+      description: `${breakfast.name}${breakfast.rating ? ` • ${breakfast.rating}★` : ''}${breakfast.reviewCount ? ` (${breakfast.reviewCount} reviews)` : ''}`,
       date: dateStr,
       time: '08:00',
-      location: 'Hotel',
+      location: dayLocation,
       price: Math.round((15 + Math.random() * 25) * multiplier),
       currency: 'USD',
       editable: true,
+      url: breakfast.url || undefined,
     });
 
     const activityTitle = dayActivities[Math.floor(Math.random() * Math.min(dayActivities.length, 4))] || activities[0];
@@ -200,30 +208,34 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       editable: true,
     });
 
+    const lunch = restaurants[Math.floor(Math.random() * Math.min(restaurants.length, 5)) + 1] || restaurants[0] || { name: FALLBACK_RESTAURANTS[1], rating: 4.3, reviewCount: 0, url: '' };
     dayItems.push({
       id: randomId(),
       type: 'meal',
       title: 'Lunch',
-      description: RESTAURANTS[Math.floor(Math.random() * RESTAURANTS.length)],
+      description: `${lunch.name}${lunch.rating ? ` • ${lunch.rating}★` : ''}${lunch.reviewCount ? ` (${lunch.reviewCount} reviews)` : ''}`,
       date: dateStr,
       time: '13:30',
       location: dayLocation,
       price: Math.round((25 + Math.random() * 40) * multiplier),
       currency: 'USD',
       editable: true,
+      url: lunch.url || undefined,
     });
 
+    const dinner = restaurants[Math.floor(Math.random() * Math.min(restaurants.length, 5)) + 2] || restaurants[1] || { name: FALLBACK_RESTAURANTS[2], rating: 4.6, reviewCount: 0, url: '' };
     dayItems.push({
       id: randomId(),
       type: 'meal',
       title: 'Dinner',
-      description: RESTAURANTS[Math.floor(Math.random() * RESTAURANTS.length)],
+      description: `${dinner.name}${dinner.rating ? ` • ${dinner.rating}★` : ''}${dinner.reviewCount ? ` (${dinner.reviewCount} reviews)` : ''}`,
       date: dateStr,
       time: '19:30',
       location: dayLocation,
       price: Math.round((50 + Math.random() * 100) * multiplier),
       currency: 'USD',
       editable: true,
+      url: dinner.url || undefined,
     });
 
     dayItems.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
@@ -256,6 +268,7 @@ export async function generateItinerary(tripRequest: TripRequest): Promise<Itine
       duration: '9h 15m',
       provider: selectedFlight?.airline,
       editable: true,
+      url: selectedFlight?.url || `https://www.google.com/travel/flights?q=Flights%20from%20${encodeURIComponent(primaryDestination)}`,
     });
   }
 

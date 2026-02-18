@@ -1,13 +1,13 @@
 # API Integration Guide for Trajectory Travel
 
-This guide explains how to integrate real flight, hotel, and booking APIs to make Trajectory Travel production-ready.
+This guide explains how to use real flight, hotel, and restaurant APIs. **The app now supports real data** when API keys are configured.
 
 ## Current State
 
-The app currently uses **simulated data** for:
-- **Flights**: Mock flight options based on origin/destination (see `src/lib/flight-search.ts`)
-- **Hotels**: Mock hotels with simulated ratings (see `src/lib/hotel-search.ts`)
-- **Booking**: Simulated confirmation codes (see `src/app/api/book-trip/route.ts`)
+- **Flights**: Amadeus API when `AMADEUS_API_KEY` + `AMADEUS_API_SECRET` are set; otherwise mock data
+- **Hotels**: Amadeus Hotel List + Ratings API when keys set; sorted by rating; otherwise mock data
+- **Restaurants**: Yelp API when `YELP_API_KEY` is set; sorted by rating; otherwise mock data
+- **Clickable items**: Flights, hotels, and restaurants link to booking/review pages
 
 ## APIs You'll Need
 
