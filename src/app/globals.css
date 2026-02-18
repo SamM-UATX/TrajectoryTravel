@@ -3,14 +3,19 @@
 @tailwind utilities;
 
 :root {
-  --sky-blue: #415A77;
-  --cloud-gray: #E0E1DD;
+  --cream: #FDFBF7;
+  --cream-dark: #F5F0E8;
+  --navy: #1E3A5F;
+  --navy-light: #2C5282;
+  --navy-dark: #0F2744;
+  --accent-gold: #C9A227;
+  --cloud-gray: #E8E4DE;
   --white: #FFFFFF;
 }
 
 @layer base {
   body {
-    background-color: #FFFFFF;
+    background-color: var(--cream);
     color: #1a1a2e;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -35,10 +40,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #415A77;
+  background: #1E3A5F;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2d3d54;
+  background: #0F2744;
 }

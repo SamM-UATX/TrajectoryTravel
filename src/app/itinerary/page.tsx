@@ -56,7 +56,7 @@ export default function ItineraryPage() {
 
   if (!itinerary) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="min-h-screen flex items-center justify-center bg-cream">
         <Loader2 className="w-12 h-12 text-sky-blue animate-spin" />
       </div>
     );
@@ -64,7 +64,7 @@ export default function ItineraryPage() {
 
   if (bookingState.status === 'success' && bookingState.result) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-cream">
         <div className="max-w-2xl mx-auto px-6 py-16 text-center">
           <div className="w-20 h-20 rounded-full bg-sky-blue/20 flex items-center justify-center mx-auto mb-6">
             <span className="text-4xl text-sky-blue">✓</span>
@@ -89,8 +89,8 @@ export default function ItineraryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-20 flex items-center gap-4 p-4 md:p-6 bg-white/95 backdrop-blur-lg border-b border-cloud-gray">
+    <div className="min-h-screen bg-cream">
+      <header className="sticky top-0 z-20 flex items-center gap-4 p-4 md:p-6 bg-cream/95 backdrop-blur-lg border-b border-cloud-gray">
         <button
           onClick={() => router.push('/')}
           className="flex items-center gap-2 text-sky-blue hover:text-sky-blue-dark transition-colors"

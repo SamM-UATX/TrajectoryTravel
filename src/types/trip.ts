@@ -5,9 +5,11 @@ export interface TripRequest {
   firstName: string;
   lastName: string;
   phone?: string;
+  hometown: string;  // Origin city for flight search
   departureDate: string;
   returnDate: string;
   destinations: string[];
+  activities?: string;  // What they want to do (e.g. "sightseeing, food tours")
   budgetLevel: BudgetLevel;
   travelers: number;
   notes?: string;

@@ -10,11 +10,13 @@ export async function POST(request: NextRequest) {
       firstName: body.firstName,
       lastName: body.lastName,
       phone: body.phone,
+      hometown: body.hometown || 'New York',
       departureDate: body.departureDate,
       returnDate: body.returnDate,
       destinations: Array.isArray(body.destinations) 
         ? body.destinations 
         : (body.destinations || '').split(',').map((d: string) => d.trim()).filter(Boolean),
+      activities: body.activities,
       budgetLevel: body.budgetLevel || 'moderate',
       travelers: parseInt(body.travelers, 10) || 1,
       notes: body.notes,
@@ -27,6 +29,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!tripRequest.hometown?.trim()) {
+      return NextResponse.json(
+        { error: 'Hometown (departing from) is required for flight search' },
+        { status: 400 }
+      );
+    }
+
     if (tripRequest.destinations.length === 0) {
       return NextResponse.json(
         { error: 'At least one destination is required' },
@@ -34,7 +43,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const itinerary = generateItinerary(tripRequest);
+    const itinerary = await generateItinerary(tripRequest);
     return NextResponse.json(itinerary);
   } catch (error) {
     console.error('Itinerary generation error:', error);

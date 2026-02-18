@@ -6,11 +6,11 @@ export default function GlobeWithPlane() {
       <svg viewBox="0 0 400 400" className="w-full h-full drop-shadow-2xl">
         <defs>
           <linearGradient id="globeFill" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#E0E1DD" />
-            <stop offset="100%" stopColor="#c4c5c1" />
+            <stop offset="0%" stopColor="#FDFBF7" />
+            <stop offset="100%" stopColor="#E8E4DE" />
           </linearGradient>
           <filter id="planeShadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="2" dy="2" stdDeviation="2" floodColor="#415A77" floodOpacity="0.3" />
+            <feDropShadow dx="2" dy="2" stdDeviation="2" floodColor="#1E3A5F" floodOpacity="0.3" />
           </filter>
         </defs>
 
@@ -20,7 +20,7 @@ export default function GlobeWithPlane() {
           cy="200"
           r="150"
           fill="url(#globeFill)"
-          stroke="#415A77"
+          stroke="#1E3A5F"
           strokeWidth="2.5"
         />
 
@@ -36,9 +36,9 @@ export default function GlobeWithPlane() {
               rx={visibleRadius}
               ry={visibleRadius * 0.08}
               fill="none"
-              stroke="#415A77"
+              stroke="#1E3A5F"
               strokeWidth="1.5"
-              strokeOpacity="0.6"
+              strokeOpacity="0.5"
             />
           );
         })}
@@ -53,7 +53,7 @@ export default function GlobeWithPlane() {
               key={`lon-${i}`}
               d={path}
               fill="none"
-              stroke="#415A77"
+              stroke="#1E3A5F"
               strokeWidth="1.5"
               strokeOpacity="0.5"
             />
@@ -64,36 +64,31 @@ export default function GlobeWithPlane() {
         <path
           d="M 30 200 Q 200 50 370 200"
           fill="none"
-          stroke="#415A77"
+          stroke="#1E3A5F"
           strokeWidth="2"
           strokeDasharray="8 6"
           strokeOpacity="0.5"
         />
 
-        {/* Plane - flying along the arc */}
-        <g filter="url(#planeShadow)">
-          <animateMotion
-            dur="3.5s"
-            repeatCount="indefinite"
-            path="M 30 200 Q 200 50 370 200"
-          />
+        {/* Plane - static on the arc */}
+        <g filter="url(#planeShadow)" transform="translate(170, 100)">
           <g transform="translate(-24, -14) rotate(-20)">
             <path
               d="M 0 14 L 50 14 L 56 10 L 60 14 L 56 18 L 50 14"
-              fill="#415A77"
-              stroke="#2d3d54"
+              fill="#1E3A5F"
+              stroke="#0F2744"
               strokeWidth="1.5"
             />
             <path
               d="M 0 10 L 10 4 L 10 16 L 0 14 Z"
-              fill="#415A77"
-              stroke="#2d3d54"
+              fill="#1E3A5F"
+              stroke="#0F2744"
               strokeWidth="1"
             />
             <path
               d="M 25 14 L 18 26 L 32 26 Z"
-              fill="#5a7a9e"
-              stroke="#415A77"
+              fill="#2C5282"
+              stroke="#1E3A5F"
               strokeWidth="1"
             />
           </g>

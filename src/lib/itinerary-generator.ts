@@ -1,27 +1,23 @@
 import { TripRequest, Itinerary, DayPlan, ItineraryItem } from '@/types/trip';
 import { addDays, format, parseISO } from 'date-fns';
+import { searchFlights } from './flight-search';
+import { searchHotels } from './hotel-search';
+import { getRegionalStops } from './regional-tours';
 
-const FLIGHT_PROVIDERS = ['United', 'Delta', 'American', 'Emirates', 'British Airways', 'Lufthansa'];
-const HOTEL_CHAINS = ['Marriott', 'Hilton', 'Hyatt', 'Four Seasons', 'Ritz-Carlton', 'W Hotels'];
-const TRAIN_OPERATORS = ['Eurostar', 'TGV', 'ICE', 'Shinkansen', 'Amtrak', 'Virgin Trains'];
-const ACTIVITIES = [
-  'City walking tour',
-  'Museum visit',
-  'Local market exploration',
-  'Cooking class',
-  'Wine tasting',
-  'Sunset cruise',
-  'Historical site tour',
-  'Food tour',
-];
+const TRAIN_OPERATORS = ['Eurostar', 'TGV', 'ICE', 'Shinkansen', 'Amtrak', 'Virgin Trains', 'Great Western Railway'];
+
+const ACTIVITY_BY_INTEREST: Record<string, string[]> = {
+  sightseeing: ['City walking tour', 'Historical site tour', 'Landmark visit', 'Architecture tour'],
+  food: ['Food tour', 'Cooking class', 'Wine tasting', 'Market visit'],
+  hiking: ['Nature hike', 'Scenic walk', 'Mountain tour', 'Coastal trail'],
+  museums: ['Museum visit', 'Art gallery tour', 'Cultural center'],
+  nightlife: ['Evening bar crawl', 'Live music venue', 'Rooftop experience'],
+  default: ['City walking tour', 'Museum visit', 'Local market exploration', 'Historical site tour'],
+};
 
 const RESTAURANTS = [
-  'Le Petit Bistro',
-  'The Local Table',
-  'Rooftop Garden',
-  'Seaside Grill',
-  'Traditional Taverna',
-  'Michelin-starred experience',
+  'Le Petit Bistro', 'The Local Table', 'Rooftop Garden', 'Seaside Grill',
+  'Traditional Taverna', 'Michelin-starred experience', 'Farm-to-table dining',
 ];
 
 function randomId(): string {
@@ -37,34 +33,70 @@ function getMultiplier(budgetLevel: TripRequest['budgetLevel']): number {
   }
 }
 
-export function generateItinerary(tripRequest: TripRequest): Itinerary {
+function getActivitiesForInterests(activitiesStr?: string): string[] {
+  if (!activitiesStr?.trim()) return ACTIVITY_BY_INTEREST.default;
+  const interests = activitiesStr.toLowerCase().split(/[,&]+/).map(s => s.trim());
+  const result: string[] = [];
+  for (const i of interests) {
+    const match = Object.entries(ACTIVITY_BY_INTEREST).find(([k]) => i.includes(k) || k.includes(i));
+    if (match) result.push(...match[1]);
+  }
+  return result.length ? Array.from(new Set(result)) : ACTIVITY_BY_INTEREST.default;
+}
+
+export async function generateItinerary(tripRequest: TripRequest): Promise<Itinerary> {
   const multiplier = getMultiplier(tripRequest.budgetLevel);
   const startDate = parseISO(tripRequest.departureDate);
   const endDate = parseISO(tripRequest.returnDate);
   const totalDays = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
   const primaryDestination = tripRequest.destinations[0] || 'Your Destination';
 
+  // Fetch real flight options from hometown to destination
+  const flights = await searchFlights({
+    origin: tripRequest.hometown || 'New York',
+    destination: primaryDestination,
+    departureDate: tripRequest.departureDate,
+    returnDate: tripRequest.returnDate,
+    travelers: tripRequest.travelers,
+    budgetLevel: tripRequest.budgetLevel,
+  });
+  const selectedFlight = flights[0];
+
+  // Fetch hotels with ratings (simulated from reviews)
+  const hotels = await searchHotels({
+    location: primaryDestination,
+    checkIn: tripRequest.departureDate,
+    checkOut: tripRequest.returnDate,
+    travelers: tripRequest.travelers,
+    budgetLevel: tripRequest.budgetLevel,
+  });
+  const selectedHotel = hotels[0];
+
+  const regionalStops = getRegionalStops(primaryDestination);
+  const activities = getActivitiesForInterests(tripRequest.activities);
+
   const days: DayPlan[] = [];
   let totalPrice = 0;
 
-  // Day 0: Outbound flight
-  const outboundFlightPrice = Math.round((400 + Math.random() * 600) * multiplier * tripRequest.travelers);
+  // Day 1: Outbound flight
+  const outboundFlightPrice = selectedFlight?.price ?? Math.round((400 + Math.random() * 600) * multiplier * tripRequest.travelers);
   totalPrice += outboundFlightPrice;
-  const flightProvider = FLIGHT_PROVIDERS[Math.floor(Math.random() * FLIGHT_PROVIDERS.length)];
 
   const day0Items: ItineraryItem[] = [
     {
       id: randomId(),
       type: 'flight',
-      title: `Outbound Flight to ${primaryDestination}`,
-      description: `${flightProvider} - Economy ${tripRequest.budgetLevel === 'luxury' ? 'Business' : 'Class'}`,
+      title: `Outbound: ${tripRequest.hometown || 'Home'} → ${primaryDestination}`,
+      description: selectedFlight
+        ? `${selectedFlight.airline} ${selectedFlight.flightNumber} • ${selectedFlight.class} • Dep ${selectedFlight.departureTime}`
+        : 'Flight to destination',
       date: tripRequest.departureDate,
-      time: '08:30',
-      location: 'Departure Airport',
+      time: selectedFlight?.departureTime ?? '08:30',
+      location: tripRequest.hometown || 'Departure',
       price: outboundFlightPrice,
       currency: 'USD',
-      duration: '8h 45m',
-      provider: flightProvider,
+      duration: selectedFlight?.duration ?? '8h 45m',
+      provider: selectedFlight?.airline,
       editable: true,
     },
     {
@@ -83,15 +115,18 @@ export function generateItinerary(tripRequest: TripRequest): Itinerary {
     {
       id: randomId(),
       type: 'hotel',
-      title: `${HOTEL_CHAINS[Math.floor(Math.random() * HOTEL_CHAINS.length)]} ${primaryDestination}`,
-      description: `${tripRequest.budgetLevel === 'luxury' ? 'Suite' : 'Deluxe Room'} - ${totalDays} nights`,
+      title: selectedHotel?.name ?? `Hotel in ${primaryDestination}`,
+      description: selectedHotel
+        ? `${selectedHotel.rating}★ (${selectedHotel.reviewCount.toLocaleString()} reviews) • ${selectedHotel.amenities.slice(0, 2).join(', ')}`
+        : `${totalDays} nights`,
       date: tripRequest.departureDate,
       time: '19:00',
-      location: primaryDestination,
-      price: Math.round(180 * totalDays * multiplier),
+      location: selectedHotel?.location ?? primaryDestination,
+      price: Math.round((selectedHotel?.pricePerNight ?? 180) * totalDays),
       currency: 'USD',
       duration: `${totalDays} nights`,
       editable: true,
+      metadata: selectedHotel ? { rating: selectedHotel.rating, reviewCount: selectedHotel.reviewCount } : undefined,
     },
   ];
   totalPrice += day0Items[1].price + day0Items[2].price;
@@ -103,14 +138,21 @@ export function generateItinerary(tripRequest: TripRequest): Itinerary {
     items: day0Items,
   });
 
-  // Middle days
+  // Distribute regional stops across middle days
+  const stopIndices = regionalStops.length > 1
+    ? regionalStops.slice(1).map((_, i) => Math.floor(((i + 1) / regionalStops.length) * (totalDays - 2)) + 1)
+    : [];
+
   for (let i = 1; i < totalDays - 1; i++) {
     const date = addDays(startDate, i);
     const dateStr = format(date, 'yyyy-MM-dd');
+    const stopIndex = stopIndices.indexOf(i);
+    const dayLocation = stopIndex >= 0 ? regionalStops[stopIndex + 1].name : primaryDestination;
+    const dayStop = stopIndex >= 0 ? regionalStops[stopIndex + 1] : regionalStops[0];
+    const dayActivities = dayStop.popularActivities || activities;
+
     const dayItems: ItineraryItem[] = [];
 
-    // Breakfast
-    const breakfastPrice = Math.round((15 + Math.random() * 25) * multiplier);
     dayItems.push({
       id: randomId(),
       type: 'meal',
@@ -119,31 +161,45 @@ export function generateItinerary(tripRequest: TripRequest): Itinerary {
       date: dateStr,
       time: '08:00',
       location: 'Hotel',
-      price: breakfastPrice,
+      price: Math.round((15 + Math.random() * 25) * multiplier),
       currency: 'USD',
       editable: true,
     });
-    totalPrice += breakfastPrice;
 
-    // Morning activity
-    const activityPrice = Math.round((40 + Math.random() * 80) * multiplier);
+    const activityTitle = dayActivities[Math.floor(Math.random() * Math.min(dayActivities.length, 4))] || activities[0];
+    const needsTransfer = stopIndex >= 0 && dayLocation !== primaryDestination;
+    if (needsTransfer) {
+      const trainPrice = Math.round((40 + Math.random() * 80) * multiplier * tripRequest.travelers);
+      dayItems.push({
+        id: randomId(),
+        type: 'train',
+        title: `Day trip to ${dayLocation}`,
+        description: `${TRAIN_OPERATORS[Math.floor(Math.random() * TRAIN_OPERATORS.length)]} • Round trip`,
+        date: dateStr,
+        time: '09:00',
+        location: primaryDestination,
+        price: trainPrice,
+        currency: 'USD',
+        duration: '1-2h each way',
+        editable: true,
+      });
+      totalPrice += trainPrice;
+    }
+
     dayItems.push({
       id: randomId(),
       type: 'activity',
-      title: ACTIVITIES[Math.floor(Math.random() * ACTIVITIES.length)],
-      description: 'Guided experience',
+      title: activityTitle,
+      description: dayStop?.description || 'Guided experience',
       date: dateStr,
-      time: '10:00',
-      location: primaryDestination,
-      price: activityPrice,
+      time: needsTransfer ? '11:00' : '10:00',
+      location: dayLocation,
+      price: Math.round((40 + Math.random() * 80) * multiplier),
       currency: 'USD',
       duration: '3h',
       editable: true,
     });
-    totalPrice += activityPrice;
 
-    // Lunch
-    const lunchPrice = Math.round((25 + Math.random() * 40) * multiplier);
     dayItems.push({
       id: randomId(),
       type: 'meal',
@@ -151,35 +207,12 @@ export function generateItinerary(tripRequest: TripRequest): Itinerary {
       description: RESTAURANTS[Math.floor(Math.random() * RESTAURANTS.length)],
       date: dateStr,
       time: '13:30',
-      location: primaryDestination,
-      price: lunchPrice,
+      location: dayLocation,
+      price: Math.round((25 + Math.random() * 40) * multiplier),
       currency: 'USD',
       editable: true,
     });
-    totalPrice += lunchPrice;
 
-    // Afternoon - maybe train if multiple destinations
-    if (tripRequest.destinations.length > 1 && i === Math.floor(totalDays / 2)) {
-      const trainPrice = Math.round((60 + Math.random() * 120) * multiplier * tripRequest.travelers);
-      const nextDest = tripRequest.destinations[1];
-      dayItems.push({
-        id: randomId(),
-        type: 'train',
-        title: `Train to ${nextDest}`,
-        description: `${TRAIN_OPERATORS[Math.floor(Math.random() * TRAIN_OPERATORS.length)]} - First Class`,
-        date: dateStr,
-        time: '15:00',
-        location: primaryDestination,
-        price: trainPrice,
-        currency: 'USD',
-        duration: '2h 30m',
-        editable: true,
-      });
-      totalPrice += trainPrice;
-    }
-
-    // Dinner
-    const dinnerPrice = Math.round((50 + Math.random() * 100) * multiplier);
     dayItems.push({
       id: randomId(),
       type: 'meal',
@@ -187,47 +220,46 @@ export function generateItinerary(tripRequest: TripRequest): Itinerary {
       description: RESTAURANTS[Math.floor(Math.random() * RESTAURANTS.length)],
       date: dateStr,
       time: '19:30',
-      location: primaryDestination,
-      price: dinnerPrice,
+      location: dayLocation,
+      price: Math.round((50 + Math.random() * 100) * multiplier),
       currency: 'USD',
       editable: true,
     });
-    totalPrice += dinnerPrice;
 
     dayItems.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
+    const dayTotal = dayItems.reduce((s, it) => s + it.price, 0);
+    totalPrice += dayTotal;
 
     days.push({
       date: dateStr,
       dayNumber: i + 1,
-      location: primaryDestination,
+      location: dayLocation,
       items: dayItems,
     });
   }
 
-  // Last day: return flight
+  // Return flight
   const returnFlightPrice = Math.round((400 + Math.random() * 600) * multiplier * tripRequest.travelers);
   totalPrice += returnFlightPrice;
-
-  const lastDate = format(addDays(startDate, totalDays - 1), 'yyyy-MM-dd');
   const lastDay = days[days.length - 1];
   if (lastDay) {
     lastDay.items.push({
       id: randomId(),
       type: 'flight',
-      title: `Return Flight`,
-      description: `${flightProvider} - ${tripRequest.budgetLevel === 'luxury' ? 'Business' : 'Economy'} Class`,
+      title: `Return: ${primaryDestination} → ${tripRequest.hometown || 'Home'}`,
+      description: selectedFlight ? `${selectedFlight.airline} • ${tripRequest.budgetLevel === 'luxury' ? 'Business' : 'Economy'}` : 'Return flight',
       date: tripRequest.returnDate,
       time: '14:00',
       location: primaryDestination,
       price: returnFlightPrice,
       currency: 'USD',
       duration: '9h 15m',
-      provider: flightProvider,
+      provider: selectedFlight?.airline,
       editable: true,
     });
   }
 
-  // Add recommendations to last day
+  // Popular recommendations for the region
   const recs: ItineraryItem[] = [
     {
       id: randomId(),
@@ -249,6 +281,16 @@ export function generateItinerary(tripRequest: TripRequest): Itinerary {
       currency: 'USD',
       editable: true,
     },
+    ...regionalStops.slice(0, 2).map((stop, i) => ({
+      id: randomId(),
+      type: 'recommendation' as const,
+      title: `Don't miss: ${stop.popularActivities[0] || stop.name}`,
+      description: stop.description,
+      date: '',
+      price: 0,
+      currency: 'USD' as const,
+      editable: false,
+    })),
   ];
   totalPrice += recs[0].price + recs[1].price;
   if (lastDay) lastDay.items.push(...recs);
