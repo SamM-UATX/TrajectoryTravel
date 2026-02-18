@@ -24,9 +24,9 @@ export default function HomePage() {
           destinations: data.destinations.split(',').map(d => d.trim()).filter(Boolean),
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to generate itinerary');
-      sessionStorage.setItem('itinerary', JSON.stringify(data));
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to generate itinerary');
+      sessionStorage.setItem('itinerary', JSON.stringify(result));
       router.push('/itinerary');
     } catch (err) {
       console.error(err);
