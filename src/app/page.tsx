@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import NavBar from '@/components/NavBar';
+import ParallaxHero from '@/components/ParallaxHero';
+import TripSection from '@/components/TripSection';
 import TripRequestForm, { TripFormData } from '@/components/TripRequestForm';
-import GlobeWithPlane from '@/components/GlobeWithPlane';
-import { Plane, MapPin, Shield, Sparkles } from 'lucide-react';
-import DestinationHero from '@/components/DestinationHero';
+import { getTripsByCategory } from '@/lib/trips-data';
+import { Mail, MapPin, Phone } from 'lucide-react';
 
 export default function HomePage() {
   const router = useRouter();
@@ -21,7 +23,7 @@ export default function HomePage() {
           ...data,
           hometown: data.hometown,
           activities: data.activities,
-          destinations: data.destinations.split(',').map(d => d.trim()).filter(Boolean),
+          destinations: data.destinations.split(',').map((d) => d.trim()).filter(Boolean),
         }),
       });
       const result = await res.json();
@@ -36,90 +38,90 @@ export default function HomePage() {
     }
   };
 
+  const scenicTrips = getTripsByCategory('scenic');
+  const historicTrips = getTripsByCategory('historic');
+  const exoticTrips = getTripsByCategory('exotic');
+
   return (
     <div className="min-h-screen bg-cream">
-      {/* Decorative gradient background */}
-      <div className="fixed inset-0 -z-10 bg-gradient-to-br from-cream via-cream-dark to-navy/5 pointer-events-none" />
-      <div className="fixed top-0 right-0 w-[500px] h-[500px] -z-10 bg-accent-teal/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-      <div className="fixed bottom-0 left-0 w-[400px] h-[400px] -z-10 bg-accent-gold/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
+      <NavBar />
 
-      {/* Hero with plane + globe */}
-      <div className="relative overflow-hidden pt-8 pb-6">
-        <div className="max-w-4xl mx-auto px-6">
-          <header className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-xl bg-navy flex items-center justify-center">
-                <Plane className="w-5 h-5 text-cream" />
-              </div>
-              <span className="font-bold text-xl text-navy">Trajectory</span>
-            </div>
-            <nav className="hidden md:flex gap-6 text-navy">
-              <a href="#how-it-works" className="hover:text-navy-dark transition-colors">How it works</a>
-              <a href="#destinations" className="hover:text-navy-dark transition-colors">Destinations</a>
-            </nav>
-          </header>
+      {/* Parallax Hawaii hero */}
+      <ParallaxHero />
 
-          {/* Destination hero carousel - enlarged */}
-          <div className="mb-8">
-            <DestinationHero />
-          </div>
+      {/* Scenic section */}
+      <TripSection
+        id="scenic"
+        title="Scenic"
+        subtitle="Breathtaking landscapes, dramatic coastlines, and natural wonders"
+        trips={scenicTrips}
+      />
 
-          {/* Static logo: plane on globe */}
-          <div className="mb-6 scale-75 md:scale-90">
-            <GlobeWithPlane />
-          </div>
+      {/* Historic section */}
+      <TripSection
+        id="historic"
+        title="Historic"
+        subtitle="Ancient ruins, timeless architecture, and the stories of civilizations"
+        trips={historicTrips}
+      />
 
-          {/* Trajectory Travel - underneath */}
-          <h1 className="text-4xl md:text-5xl font-bold text-navy text-center mt-4 tracking-tight">
-            Trajectory Travel
-          </h1>
-          <p className="text-lg text-ink/80 text-center max-w-2xl mx-auto mt-4">
-            Your perfect trip, planned for you. Tell us your dates and destinations—we&apos;ll handle flights, hotels, trains, meals, and everything in between.
+      {/* Exotic section */}
+      <TripSection
+        id="exotic"
+        title="Exotic"
+        subtitle="Unique cultures, volcanic islands, and unforgettable adventures"
+        trips={exoticTrips}
+      />
+
+      {/* Custom Trip CTA - scrolls to form on same page */}
+      <section id="custom-trip" className="py-16 md:py-24 bg-slate-gray/10">
+        <div className="max-w-2xl mx-auto px-6 text-center">
+          <h2 className="text-3xl font-bold text-sage-dark">Custom Trip</h2>
+          <p className="text-slate-gray mt-2">
+            Tell us your dates and dreams—we&apos;ll create a personalized itinerary with flights, hotels, and activities.
           </p>
-
-          {/* Quick destination chips */}
-          <div className="flex flex-wrap justify-center gap-2 mt-6">
-            {['Paris', 'London', 'Tokyo', 'Rome', 'Santorini', 'Alaska'].map((dest) => (
-              <span
-                key={dest}
-                className="px-3 py-1.5 rounded-lg text-sm font-medium bg-white/80 text-navy border border-navy/10 shadow-sm hover:bg-navy/5 transition-colors"
-              >
-                {dest}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex flex-wrap justify-center gap-4 mt-8">
-            {[
-              { icon: Plane, label: 'Flights', color: 'bg-navy/10 text-navy border border-navy/20' },
-              { icon: MapPin, label: 'Hotels', color: 'bg-accent-teal/15 text-accent-teal border border-accent-teal/30' },
-              { icon: Sparkles, label: 'Activities', color: 'bg-accent-gold/15 text-accent-gold border border-accent-gold/30' },
-              { icon: Shield, label: 'All booked', color: 'bg-navy/10 text-navy border border-navy/20' },
-            ].map(({ icon: Icon, label, color }) => (
-              <div
-                key={label}
-                className={`flex items-center gap-2 px-5 py-3 rounded-full border font-medium shadow-sm ${color}`}
-              >
-                <Icon className="w-5 h-5" />
-                <span className="text-sm">{label}</span>
-              </div>
-            ))}
+          <div className="mt-8 rounded-2xl bg-white border border-slate-gray/20 p-6 md:p-8 shadow-lg">
+            <TripRequestForm onSubmit={handleSubmit} isLoading={isLoading} />
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Form card */}
-      <div className="max-w-2xl mx-auto px-6 pb-24">
-        <div className="rounded-2xl bg-white border-2 border-navy/10 p-6 md:p-8 shadow-xl shadow-navy/10 ring-1 ring-navy/5">
-          <h2 className="text-2xl font-bold text-ink mb-2">Plan your trip</h2>
-          <p className="text-ink/70 mb-6">We&apos;ll create a full itinerary for you to review and customize.</p>
-          <TripRequestForm onSubmit={handleSubmit} isLoading={isLoading} />
+      {/* Contact section */}
+      <section id="contact" className="py-16 md:py-24 bg-mint-light/30">
+        <div className="max-w-4xl mx-auto px-6">
+          <h2 className="text-3xl font-bold text-sage-dark text-center mb-2">
+            <span className="font-serif italic text-ocean-breeze">Contact</span>
+          </h2>
+          <p className="text-slate-gray text-center mb-12">
+            Ready to plan your next adventure? Get in touch.
+          </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center p-6 rounded-2xl bg-white border border-slate-gray/20">
+              <Mail className="w-8 h-8 text-sage mx-auto mb-3" />
+              <h3 className="font-semibold text-ink">Email</h3>
+              <a href="mailto:hello@trajectorytravel.com" className="text-ocean-breeze hover:underline mt-1 block">
+                hello@trajectorytravel.com
+              </a>
+            </div>
+            <div className="text-center p-6 rounded-2xl bg-white border border-slate-gray/20">
+              <Phone className="w-8 h-8 text-sage mx-auto mb-3" />
+              <h3 className="font-semibold text-ink">Phone</h3>
+              <a href="tel:+15551234567" className="text-ocean-breeze hover:underline mt-1 block">
+                +1 (555) 123-4567
+              </a>
+            </div>
+            <div className="text-center p-6 rounded-2xl bg-white border border-slate-gray/20">
+              <MapPin className="w-8 h-8 text-sage mx-auto mb-3" />
+              <h3 className="font-semibold text-ink">Office</h3>
+              <p className="text-slate-gray mt-1">123 Travel Lane, Honolulu, HI</p>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <footer className="border-t-2 border-navy/10 py-10 text-center text-ink/70 text-sm bg-gradient-to-b from-cream-dark to-navy/5">
-        <p className="font-medium text-navy">Trajectory Travel</p>
-        <p className="mt-1">Plan, edit, approve, and we book it all</p>
+      <footer className="border-t border-slate-gray/20 py-10 text-center text-slate-gray text-sm bg-white">
+        <p className="font-semibold text-sage-dark">Trajectory Travel</p>
+        <p className="mt-1">Plan, explore, and discover</p>
       </footer>
     </div>
   );

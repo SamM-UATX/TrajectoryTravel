@@ -11,6 +11,7 @@ const config: Config = {
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
         display: ['var(--font-cabinet)', 'system-ui', 'sans-serif'],
+        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
       },
       colors: {
         cream: '#FDFBF7',
@@ -24,6 +25,14 @@ const config: Config = {
         'cloud-gray': '#E8E4DE',
         'cloud-gray-dark': '#D4CFC6',
         ink: '#1a1a2e',
+        // New palette: light gray, green, cool accent
+        sage: '#8B9A7B',
+        'sage-light': '#A8B89A',
+        'sage-dark': '#6B7B5C',
+        mint: '#B8D4C8',
+        'mint-light': '#D4E8E0',
+        'slate-gray': '#6B7B7B',
+        'ocean-breeze': '#7BA3B8',
         // Legacy aliases for gradual migration
         'sky-blue': '#1E3A5F',
         'sky-blue-light': '#2C5282',
