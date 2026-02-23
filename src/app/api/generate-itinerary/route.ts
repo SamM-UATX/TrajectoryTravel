@@ -5,12 +5,27 @@ import { TripRequest } from '@/types/trip';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+
+    if (!body.email || !body.departureDate || !body.returnDate) {
+      return NextResponse.json(
+        { error: 'Email, departure date, and return date are required' },
+        { status: 400 }
+      );
+    }
+
+    if (!body.hometown?.trim()) {
+      return NextResponse.json(
+        { error: 'Hometown (departing from) is required for flight search' },
+        { status: 400 }
+      );
+    }
+
     const tripRequest: TripRequest = {
       email: body.email,
       firstName: body.firstName,
       lastName: body.lastName,
       phone: body.phone,
-      hometown: body.hometown || 'New York',
+      hometown: body.hometown.trim(),
       departureDate: body.departureDate,
       returnDate: body.returnDate,
       destinations: Array.isArray(body.destinations) 
@@ -21,20 +36,6 @@ export async function POST(request: NextRequest) {
       travelers: parseInt(body.travelers, 10) || 1,
       notes: body.notes,
     };
-
-    if (!tripRequest.email || !tripRequest.departureDate || !tripRequest.returnDate) {
-      return NextResponse.json(
-        { error: 'Email, departure date, and return date are required' },
-        { status: 400 }
-      );
-    }
-
-    if (!tripRequest.hometown?.trim()) {
-      return NextResponse.json(
-        { error: 'Hometown (departing from) is required for flight search' },
-        { status: 400 }
-      );
-    }
 
     if (tripRequest.destinations.length === 0) {
       return NextResponse.json(

@@ -1,19 +1,33 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  { href: '/#home', label: 'Home' },
-  { href: '/#scenic', label: 'Scenic' },
-  { href: '/#historic', label: 'Historic' },
-  { href: '/#exotic', label: 'Exotic' },
-  { href: '/#custom-trip', label: 'Custom Trip' },
-  { href: '/#contact', label: 'Contact', accent: true },
+  { href: '/#home', label: 'Home', hash: 'home' },
+  { href: '/#scenic', label: 'Scenic', hash: 'scenic' },
+  { href: '/#historic', label: 'Historic', hash: 'historic' },
+  { href: '/#exotic', label: 'Exotic', hash: 'exotic' },
+  { href: '/#custom-trip', label: 'Custom Trip', hash: 'custom-trip' },
+  { href: '/#contact', label: 'Contact', hash: 'contact', accent: true },
 ];
 
 export default function NavBar() {
   const pathname = usePathname();
+  const [hash, setHash] = useState('');
+
+  useEffect(() => {
+    setHash(typeof window !== 'undefined' ? window.location.hash.slice(1) : '');
+    const onHashChange = () => setHash(window.location.hash.slice(1));
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  const isActive = (item: (typeof navItems)[0]) => {
+    if (pathname !== '/') return false;
+    return item.hash === hash || (item.hash === 'home' && !hash);
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-gray/20">
@@ -56,7 +70,7 @@ export default function NavBar() {
               href={item.href}
               className={`text-sm font-medium transition-colors hover:text-sage-dark ${
                 item.accent ? 'font-serif italic text-ocean-breeze' : 'text-slate-gray'
-              } ${pathname === item.href ? 'text-sage-dark' : ''}`}
+              } ${isActive(item) ? 'text-sage-dark' : ''}`}
             >
               {item.label}
             </Link>
