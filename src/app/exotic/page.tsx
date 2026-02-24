@@ -17,8 +17,8 @@ export default function ExoticPage() {
             <ArrowLeft className="w-4 h-4" /> Back to home
           </Link>
           <h1 className="text-4xl font-bold text-sage-dark mb-2">Exotic</h1>
-          <p className="text-slate-gray text-lg mb-12 max-w-2xl">
-            Adventurous, exciting, and spicy. Volcanic islands, vibrant cultures, and unforgettable thrills.
+          <p className="text-slate-gray text-lg mb-12 max-w-2xl leading-relaxed">
+            Bold, immersive experiences beyond the familiar—volcanic landscapes, vibrant local cultures, and distinctive ecosystems, with opportunities for wildlife encounters, culinary discovery, and connection with communities off the conventional path.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {trips.map((trip) => (

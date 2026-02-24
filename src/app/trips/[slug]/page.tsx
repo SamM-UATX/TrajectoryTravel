@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getTripBySlug } from '@/lib/trips-data';
 import NavBar from '@/components/NavBar';
+import TripHeroCarousel from '@/components/TripHeroCarousel';
 import { ArrowLeft } from 'lucide-react';
 
 export async function generateStaticParams() {
@@ -13,28 +14,26 @@ export default async function TripPage({ params }: { params: { slug: string } })
   const trip = getTripBySlug(params.slug);
   if (!trip) notFound();
 
+  const heroImages = trip.coverImages?.length ? trip.coverImages : [trip.coverImage];
+
   return (
     <div className="min-h-screen bg-cream">
       <NavBar />
 
-      {/* Hero with cover image - pt-24 clears fixed navbar */}
-      <div className="relative h-[45vh] min-h-[320px] pt-24">
-        <img
-          src={trip.coverImage}
-          alt={trip.title}
-          className="w-full h-full object-cover object-top"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-cream via-black/20 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+      {/* Hero with sliding photo carousel */}
+      <TripHeroCarousel images={heroImages} title={trip.title} alt={trip.title} />
+
+      <div className="relative -mt-32 z-20 px-6">
+        <div className="max-w-4xl">
           <Link
             href={`/${trip.category}`}
-            className="inline-flex items-center gap-2 text-sm text-white/90 hover:text-white mb-4"
+            className="inline-flex items-center gap-2 text-sm text-white hover:text-white/90 mb-4 drop-shadow-lg"
           >
             <ArrowLeft className="w-4 h-4" /> Back to {trip.category} trips
           </Link>
-          <h1 className="text-3xl md:text-4xl font-bold">{trip.title}</h1>
-          <p className="text-white/90 mt-1">{trip.subtitle}</p>
-          <div className="flex gap-4 mt-3 text-sm">
+          <h1 className="text-3xl md:text-4xl font-bold text-white drop-shadow-lg">{trip.title}</h1>
+          <p className="text-white/95 mt-1 drop-shadow-md">{trip.subtitle}</p>
+          <div className="flex gap-4 mt-3 text-sm text-white/90">
             <span>{trip.duration}</span>
             <span>•</span>
             <span>From {trip.priceFrom}</span>

@@ -18,6 +18,7 @@ export interface Trip {
   subtitle: string;
   category: TripCategory;
   coverImage: string;
+  coverImages?: string[];  // For hero carousel; falls back to [coverImage]
   duration: string;
   priceFrom: string;
   days: DayPlan[];
@@ -35,6 +36,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Dramatic cliffs, emerald valleys, and hidden beaches',
     category: 'scenic',
     coverImage: IMG('1507525428034-b723cf961d3e'),
+    coverImages: [IMG('1507525428034-b723cf961d3e'), IMG('1544551763-46a013bb70d5'), IMG('1506905925346-21bda4d32df4')],
     duration: '5 days',
     priceFrom: '$1,299',
     days: [
@@ -52,6 +54,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Winding waterfalls, bamboo forests, and black sand beaches',
     category: 'scenic',
     coverImage: IMG('1544551763-46a013bb70d5'),
+    coverImages: [IMG('1544551763-46a013bb70d5'), IMG('1507525428034-b723cf961d3e'), IMG('1523482580671-f216146beb33')],
     duration: '4 days',
     priceFrom: '$899',
     days: [
@@ -68,6 +71,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Glacier-carved valleys, waterfalls, and villages',
     category: 'scenic',
     coverImage: IMG('1502609908652-aeff09c6b31a'),
+    coverImages: [IMG('1502609908652-aeff09c6b31a'), IMG('1506905925346-21bda4d32df4'), IMG('1464822759023-fed622ff2c3b')],
     duration: '7 days',
     priceFrom: '$2,199',
     days: [
@@ -87,6 +91,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Snow-capped peaks, alpine meadows, and crystal lakes',
     category: 'scenic',
     coverImage: IMG('1506905925346-21bda4d32df4'),
+    coverImages: [IMG('1506905925346-21bda4d32df4'), IMG('1464822759023-fed622ff2c3b'), IMG('1502609908652-aeff09c6b31a')],
     duration: '6 days',
     priceFrom: '$1,899',
     days: [
@@ -105,6 +110,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Towering peaks, mirror lakes, and serene fjords',
     category: 'scenic',
     coverImage: IMG('1464822759023-fed622ff2c3b'),
+    coverImages: [IMG('1464822759023-fed622ff2c3b'), IMG('1507525428034-b723cf961d3e'), IMG('1506905925346-21bda4d32df4')],
     duration: '5 days',
     priceFrom: '$1,599',
     days: [
@@ -122,6 +128,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Waterfalls, glaciers, and otherworldly landscapes',
     category: 'scenic',
     coverImage: IMG('1504829857797-ddff29c27927'),
+    coverImages: [IMG('1504829857797-ddff29c27927'), IMG('1502609908652-aeff09c6b31a'), IMG('1519681393784-1204bd092600')],
     duration: '8 days',
     priceFrom: '$2,299',
     days: [
@@ -142,6 +149,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Towers of granite, turquoise lakes, and vast steppe',
     category: 'scenic',
     coverImage: IMG('1519681393784-1204bd092600'),
+    coverImages: [IMG('1519681393784-1204bd092600'), IMG('1464822759023-fed622ff2c3b'), IMG('1504829857797-ddff29c27927')],
     duration: '6 days',
     priceFrom: '$2,499',
     days: [
@@ -160,6 +168,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Emerald lakes, jagged peaks, and wildlife',
     category: 'scenic',
     coverImage: IMG('1528184036930-35be682eef02'),
+    coverImages: [IMG('1528184036930-35be682eef02'), IMG('1506905925346-21bda4d32df4'), IMG('1464822759023-fed622ff2c3b')],
     duration: '5 days',
     priceFrom: '$1,499',
     days: [
@@ -178,6 +187,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Colosseum, Vatican, and the heart of the Roman Empire',
     category: 'historic',
     coverImage: IMG('1552832238-c57a7197761c'),
+    coverImages: [IMG('1552832238-c57a7197761c'), IMG('1523531294919-4fcd27459059'), IMG('1539650116574-8efeb43e2750')],
     duration: '5 days',
     priceFrom: '$1,149',
     days: [
@@ -195,6 +205,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Birthplace of democracy, philosophy, and Western civilization',
     category: 'historic',
     coverImage: IMG('1523531294919-4fcd27459059'),
+    coverImages: [IMG('1523531294919-4fcd27459059'), IMG('1552832238-c57a7197761c'), IMG('1493976040374-85c8e12f0c0e')],
     duration: '4 days',
     priceFrom: '$799',
     days: [
@@ -211,6 +222,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Giza, Sphinx, and 4,500 years of history',
     category: 'historic',
     coverImage: IMG('1539650116574-8efeb43e2750'),
+    coverImages: [IMG('1539650116574-8efeb43e2750'), IMG('1548019130-49d9b2572d0a'), IMG('1552832238-c57a7197761c')],
     duration: '6 days',
     priceFrom: '$1,499',
     days: [
@@ -229,6 +241,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Geisha districts, zen gardens, and golden pavilions',
     category: 'historic',
     coverImage: IMG('1493976040374-85c8e12f0c0e'),
+    coverImages: [IMG('1493976040374-85c8e12f0c0e'), IMG('1565967518147-7a8943f6b619'), IMG('1523531294919-4fcd27459059')],
     duration: '5 days',
     priceFrom: '$1,399',
     days: [
@@ -246,6 +259,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'The Rose City carved into sandstone cliffs',
     category: 'historic',
     coverImage: IMG('1548019130-49d9b2572d0a'),
+    coverImages: [IMG('1548019130-49d9b2572d0a'), IMG('1539650116574-8efeb43e2750'), IMG('1565967518147-7a8943f6b619')],
     duration: '6 days',
     priceFrom: '$1,799',
     days: [
@@ -264,6 +278,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Temple complexes of the Khmer Empire',
     category: 'historic',
     coverImage: IMG('1565967518147-7a8943f6b619'),
+    coverImages: [IMG('1565967518147-7a8943f6b619'), IMG('1587595431973-160d0d94add1'), IMG('1548019130-49d9b2572d0a')],
     duration: '5 days',
     priceFrom: '$1,299',
     days: [
@@ -281,6 +296,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Inca citadel and ancient pathways',
     category: 'historic',
     coverImage: IMG('1587595431973-160d0d94add1'),
+    coverImages: [IMG('1587595431973-160d0d94add1'), IMG('1565967518147-7a8943f6b619'), IMG('1548019130-49d9b2572d0a')],
     duration: '6 days',
     priceFrom: '$1,699',
     days: [
@@ -299,6 +315,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Hagia Sophia, Blue Mosque, and the Bosphorus',
     category: 'historic',
     coverImage: IMG('1524231757912-21f4fe3a7200'),
+    coverImages: [IMG('1524231757912-21f4fe3a7200'), IMG('1552832238-c57a7197761c'), IMG('1539650116574-8efeb43e2750')],
     duration: '5 days',
     priceFrom: '$1,099',
     days: [
@@ -317,6 +334,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'White villages, blue domes, and volcanic beaches',
     category: 'exotic',
     coverImage: IMG('1613395877344-13d4a8e0d49e'),
+    coverImages: [IMG('1613395877344-13d4a8e0d49e'), IMG('1537996194471-e657df975ab4'), IMG('1552465011-b64b52a4d4b6')],
     duration: '4 days',
     priceFrom: '$999',
     days: [
@@ -333,6 +351,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Rice terraces, temples, and beach vibes',
     category: 'exotic',
     coverImage: IMG('1537996194471-e657df975ab4'),
+    coverImages: [IMG('1537996194471-e657df975ab4'), IMG('1613395877344-13d4a8e0d49e'), IMG('1552465011-b64b52a4d4b6')],
     duration: '6 days',
     priceFrom: '$1,299',
     days: [
@@ -351,6 +370,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Glaciers, geysers, and the aurora borealis',
     category: 'exotic',
     coverImage: IMG('1504829857797-ddff29c27927'),
+    coverImages: [IMG('1504829857797-ddff29c27927'), IMG('1613395877344-13d4a8e0d49e'), IMG('1506966958012-8a2f186ab6a6')],
     duration: '5 days',
     priceFrom: '$1,599',
     days: [
@@ -368,6 +388,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Medinas, riads, and spice markets',
     category: 'exotic',
     coverImage: IMG('1489749798305-3f2869bb7a0f'),
+    coverImages: [IMG('1489749798305-3f2869bb7a0f'), IMG('1537996194471-e657df975ab4'), IMG('1613395877344-13d4a8e0d49e')],
     duration: '5 days',
     priceFrom: '$1,199',
     days: [
@@ -385,6 +406,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Turquoise waters, limestone karsts, and beach parties',
     category: 'exotic',
     coverImage: IMG('1552465011-b64b52a4d4b6'),
+    coverImages: [IMG('1552465011-b64b52a4d4b6'), IMG('1537996194471-e657df975ab4'), IMG('1613395877344-13d4a8e0d49e')],
     duration: '6 days',
     priceFrom: '$1,099',
     days: [
@@ -403,6 +425,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Rainforests, volcanoes, and wildlife',
     category: 'exotic',
     coverImage: IMG('1473448917393-0a7bfb4ba2c0'),
+    coverImages: [IMG('1473448917393-0a7bfb4ba2c0'), IMG('1552465011-b64b52a4d4b6'), IMG('1506966958012-8a2f186ab6a6')],
     duration: '6 days',
     priceFrom: '$1,499',
     days: [
@@ -421,6 +444,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Stone Town, spice farms, and white sand beaches',
     category: 'exotic',
     coverImage: IMG('1547471080-7cc2caa01a7e'),
+    coverImages: [IMG('1547471080-7cc2caa01a7e'), IMG('1537996194471-e657df975ab4'), IMG('1504829857797-ddff29c27927')],
     duration: '5 days',
     priceFrom: '$1,399',
     days: [
@@ -438,6 +462,7 @@ export const TRIPS: Trip[] = [
     subtitle: 'Giant tortoises, blue-footed boobies, and volcanic islands',
     category: 'exotic',
     coverImage: IMG('1506966958012-8a2f186ab6a6'),
+    coverImages: [IMG('1506966958012-8a2f186ab6a6'), IMG('1587595431973-160d0d94add1'), IMG('1504829857797-ddff29c27927')],
     duration: '7 days',
     priceFrom: '$3,499',
     days: [

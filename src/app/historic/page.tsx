@@ -17,8 +17,8 @@ export default function HistoricPage() {
             <ArrowLeft className="w-4 h-4" /> Back to home
           </Link>
           <h1 className="text-4xl font-bold text-sage-dark mb-2">Historic</h1>
-          <p className="text-slate-gray text-lg mb-12 max-w-2xl">
-            Walk in the footsteps of civilizations. Ancient ruins and the stories that shaped our world.
+          <p className="text-slate-gray text-lg mb-12 max-w-2xl leading-relaxed">
+            Journeys through the architectural and cultural monuments that define human civilization—from classical antiquity to imperial capitals, with expert-led access to UNESCO World Heritage sites and living museums.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {trips.map((trip) => (

@@ -45,11 +45,11 @@ export default function HomePage() {
       {/* Parallax Hawaii hero */}
       <ParallaxHero />
 
-      {/* Scenic - relaxing, soul-healing */}
+      {/* Scenic */}
       <CategorySection
         id="scenic"
         title="Scenic"
-        description="Relaxing, soul-healing journeys through breathtaking landscapes. Let nature restore you—dramatic coastlines, serene mountains, crystal lakes, and peaceful valleys. Perfect for unwinding and reconnecting with the world."
+        description="Our Scenic collection features curated journeys through the world's most restorative landscapes. These itineraries are designed for travelers seeking respite—where dramatic coastlines, alpine vistas, and serene fjords provide a natural retreat from the everyday. Each trip emphasizes immersion in unspoiled environments, offering both active exploration and contemplative moments."
         images={SCENIC_CAROUSEL}
         href="/scenic"
         bgClass="bg-mint-light/20"
@@ -59,17 +59,17 @@ export default function HomePage() {
       <CategorySection
         id="historic"
         title="Historic"
-        description="Walk in the footsteps of civilizations. Ancient ruins, timeless architecture, and the stories that shaped our world. From the Colosseum to the Pyramids, discover the legacy of human achievement."
+        description="The Historic collection presents journeys through the architectural and cultural monuments that define human civilization. From classical antiquity to imperial capitals, these itineraries offer expert-led access to UNESCO World Heritage sites, ancient ruins, and living museums. Ideal for travelers with a deep appreciation for the narratives that have shaped our global heritage."
         images={HISTORIC_CAROUSEL}
         href="/historic"
         bgClass="bg-cloud-gray/50"
       />
 
-      {/* Exotic - adventurous, exciting, spicy */}
+      {/* Exotic */}
       <CategorySection
         id="exotic"
         title="Exotic"
-        description="Adventurous, exciting, and spicy. Volcanic islands, vibrant cultures, and unforgettable thrills. From Bali to the Galápagos, experience the world at its most dynamic and alive."
+        description="Our Exotic collection caters to travelers seeking bold, immersive experiences beyond the familiar. These itineraries combine volcanic landscapes, vibrant local cultures, and distinctive ecosystems—from the Aegean to the Galápagos. Each trip is structured to deliver both adventure and authenticity, with opportunities for wildlife encounters, culinary discovery, and connection with communities off the conventional path."
         images={EXOTIC_CAROUSEL}
         href="/exotic"
         bgClass="bg-mint-light/30"

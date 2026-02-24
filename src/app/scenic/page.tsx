@@ -17,8 +17,8 @@ export default function ScenicPage() {
             <ArrowLeft className="w-4 h-4" /> Back to home
           </Link>
           <h1 className="text-4xl font-bold text-sage-dark mb-2">Scenic</h1>
-          <p className="text-slate-gray text-lg mb-12 max-w-2xl">
-            Relaxing, soul-healing journeys through breathtaking landscapes. Let nature restore you.
+          <p className="text-slate-gray text-lg mb-12 max-w-2xl leading-relaxed">
+            Curated journeys through the world&apos;s most restorative landscapes—dramatic coastlines, alpine vistas, and serene fjords designed for travelers seeking respite and immersion in unspoiled environments.
           </p>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {trips.map((trip) => (
