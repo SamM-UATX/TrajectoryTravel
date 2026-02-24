@@ -30,6 +30,26 @@ const IMG = (id: string) => `https://images.unsplash.com/photo-${id}?w=1200&q=90
 export const TRIPS: Trip[] = [
   // ========== SCENIC (relaxing, soul-healing) ==========
   {
+    id: 'scenic-pct',
+    slug: 'pct-beach-stops',
+    title: 'PCT Beach Stops',
+    subtitle: 'Pacific Crest Trail coastal segments—dramatic shorelines and trail towns',
+    category: 'scenic',
+    coverImage: IMG('1507525428034-b723cf961d3e'),
+    coverImages: [IMG('1507525428034-b723cf961d3e'), IMG('1544551763-46a013bb70d5'), IMG('1464822759023-fed622ff2c3b')],
+    duration: '7 days',
+    priceFrom: '$1,199',
+    days: [
+      { day: 1, title: 'San Diego to Campo', description: 'Southern terminus. Settle in and prep for coastal segments.' },
+      { day: 2, title: 'Beach Camp & Trail', description: 'Coastal hike. Ocean views and trail towns.' },
+      { day: 3, title: 'Big Sur Segment', description: 'Dramatic coastline. Redwoods and sea cliffs.' },
+      { day: 4, title: 'Oregon Coast', description: 'Beach walks. Tide pools and lighthouse visits.' },
+      { day: 5, title: 'Washington Coast', description: 'Olympic Peninsula. Rainforest meets shore.' },
+      { day: 6, title: 'Trail Town Exploration', description: 'Local culture. Rest and resupply.' },
+      { day: 7, title: 'Departure', description: 'Morning at leisure. Fly home.' },
+    ],
+  },
+  {
     id: 'scenic-1',
     slug: 'napali-coast-kauai',
     title: 'Napali Coast & Kauai',
@@ -181,6 +201,24 @@ export const TRIPS: Trip[] = [
   },
   // ========== HISTORIC ==========
   {
+    id: 'historic-cotswolds',
+    slug: 'cotswolds-walking-tour',
+    title: 'Cotswolds Walking Tour',
+    subtitle: 'Villages of honey stone, rolling hills, and timeless English countryside',
+    category: 'historic',
+    coverImage: IMG('1523531294919-4fcd27459059'),
+    coverImages: [IMG('1523531294919-4fcd27459059'), IMG('1552832238-c57a7197761c'), IMG('1493976040374-85c8e12f0c0e')],
+    duration: '5 days',
+    priceFrom: '$1,499',
+    days: [
+      { day: 1, title: 'Chipping Campden', description: 'Arrive in the Cotswolds. Explore the market town and wool church.' },
+      { day: 2, title: 'Cotswold Way', description: 'Walk to Broadway. Honey-stone villages and rolling hills.' },
+      { day: 3, title: 'Stanton & Stanway', description: 'Manor houses and gardens. Afternoon tea.' },
+      { day: 4, title: 'Winchcombe', description: 'Sudeley Castle. Historic abbey and trails.' },
+      { day: 5, title: 'Departure', description: 'Morning walk. Return to London or onward.' },
+    ],
+  },
+  {
     id: 'historic-1',
     slug: 'rome-ancient-wonders',
     title: 'Rome & Ancient Wonders',
@@ -327,6 +365,27 @@ export const TRIPS: Trip[] = [
     ],
   },
   // ========== EXOTIC (adventurous, exciting, spicy) ==========
+  {
+    id: 'exotic-alps',
+    slug: 'backpacking-alps',
+    title: 'Backpacking the Alps',
+    subtitle: 'Multi-day trek through alpine passes, glaciers, and mountain huts',
+    category: 'exotic',
+    coverImage: IMG('1506905925346-21bda4d32df4'),
+    coverImages: [IMG('1506905925346-21bda4d32df4'), IMG('1464822759023-fed622ff2c3b'), IMG('1519681393784-1204bd092600')],
+    duration: '8 days',
+    priceFrom: '$2,299',
+    days: [
+      { day: 1, title: 'Chamonix', description: 'Arrive in Chamonix. Gear check and acclimatization.' },
+      { day: 2, title: 'Tour du Mont Blanc Start', description: 'First leg. Alpine meadows and mountain views.' },
+      { day: 3, title: 'Col du Bonhomme', description: 'High pass crossing. Mountain hut overnight.' },
+      { day: 4, title: 'Courmayeur', description: 'Italian Alps. Rest day and local cuisine.' },
+      { day: 5, title: 'Grand Col Ferret', description: 'Swiss border. Glacier views.' },
+      { day: 6, title: 'Trient Valley', description: 'Descent through forests. Village stay.' },
+      { day: 7, title: 'Return to Chamonix', description: 'Final leg. Summit views.' },
+      { day: 8, title: 'Departure', description: 'Morning at leisure. Fly home.' },
+    ],
+  },
   {
     id: 'exotic-1',
     slug: 'santorini-sunset',
@@ -483,4 +542,12 @@ export function getTripsByCategory(category: TripCategory): Trip[] {
 
 export function getTripBySlug(slug: string): Trip | undefined {
   return TRIPS.find((t) => t.slug === slug);
+}
+
+/** Recommended Trajectories - curated picks for home page */
+const RECOMMENDED_ORDER = ['pct-beach-stops', 'cotswolds-walking-tour', 'backpacking-alps'];
+
+export function getRecommendedTrips(): Trip[] {
+  const bySlug = Object.fromEntries(TRIPS.map((t) => [t.slug, t]));
+  return RECOMMENDED_ORDER.map((slug) => bySlug[slug]).filter(Boolean) as Trip[];
 }
