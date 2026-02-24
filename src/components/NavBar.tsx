@@ -46,11 +46,11 @@ export default function NavBar() {
             <path d="M 72 42 A 22 22 0 0 1 28 42" fill="none" stroke="#E8E4DE" strokeWidth="5" strokeLinecap="round" />
             <path d="M 28 42 A 22 22 0 0 1 15 25" fill="none" stroke="#1E3A5F" strokeWidth="3" strokeLinecap="round" />
             <path d="M 15 25 A 22 22 0 0 1 28 8" fill="none" stroke="#1E3A5F" strokeWidth="2" strokeLinecap="round" />
-            {/* Gold jet - prominent centerpiece */}
-            <g transform="translate(38, 10) scale(1.15)">
-              <path d="M 0 16 L 28 16 L 32 12 L 36 16 L 32 20 L 28 16" fill="#C9A227" stroke="#A68520" strokeWidth="1" />
-              <path d="M 10 16 L 14 6 L 18 16 Z" fill="#D4B030" stroke="#C9A227" strokeWidth="0.8" />
-              <path d="M 24 16 L 20 26 L 28 26 Z" fill="#D4B030" stroke="#C9A227" strokeWidth="0.8" />
+            {/* Gold jet - large, prominent centerpiece */}
+            <g transform="translate(32, 6) scale(1.4)">
+              <path d="M 0 18 L 30 18 L 35 13 L 40 18 L 35 23 L 30 18" fill="#C9A227" stroke="#A68520" strokeWidth="1.2" />
+              <path d="M 12 18 L 16 6 L 20 18 Z" fill="#D4B030" stroke="#C9A227" strokeWidth="0.8" />
+              <path d="M 26 18 L 22 28 L 30 28 Z" fill="#D4B030" stroke="#C9A227" strokeWidth="0.8" />
             </g>
           </svg>
         </Link>

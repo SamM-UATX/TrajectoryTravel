@@ -1,9 +1,10 @@
 /**
- * Pexels images for category sections (carousels)
- * Scenic: beaches, mountains, fjords | Historic: Rome, Cotswolds, temples | Exotic: beaches, Morocco, mountains
+ * Pexels + Unsplash images for category sections (carousels)
+ * Verified URLs for reliable loading
  */
 
 const PEX = (id: number) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200`;
+const UNSPLASH = (id: string) => `https://images.unsplash.com/photo-${id}?w=1200&q=85`;
 
 export const SCENIC_CAROUSEL = [
   PEX(1285625),
@@ -13,15 +14,15 @@ export const SCENIC_CAROUSEL = [
 ];
 
 export const HISTORIC_CAROUSEL = [
-  PEX(696205),
-  PEX(2823456),
-  PEX(318238),
-  PEX(1745747),
+  UNSPLASH('1552832238-c57a7197761c'),
+  PEX(4394220),
+  UNSPLASH('1587595431973-160d0d94add1'),
+  UNSPLASH('1539650116574-8efeb43e2750'),
 ];
 
 export const EXOTIC_CAROUSEL = [
   PEX(1285625),
-  PEX(696205),
+  PEX(30179958),
   PEX(417173),
-  PEX(1580173),
+  PEX(3355777),
 ];

@@ -1,6 +1,6 @@
 /**
  * Curated trips for Scenic, Historic, and Exotic sections
- * Uses Pexels for reliable, high-quality cover images (Unsplash IDs were deprecated/404)
+ * Uses Pexels + Unsplash for reliable, high-quality cover images
  */
 
 export type TripCategory = 'scenic' | 'historic' | 'exotic';
@@ -24,8 +24,10 @@ export interface Trip {
   days: DayPlan[];
 }
 
-// Pexels - reliable, verified URLs (w=1200)
+// Pexels - verified URLs (w=1200)
 const PEX = (id: number) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200`;
+// Unsplash - verified destination photos (fallback)
+const UNSPLASH = (id: string) => `https://images.unsplash.com/photo-${id}?w=1200&q=85`;
 
 export const TRIPS: Trip[] = [
   // ========== SCENIC (relaxing, soul-healing) ==========
@@ -446,8 +448,8 @@ export const TRIPS: Trip[] = [
     title: 'Marrakech & the Souks',
     subtitle: 'Medinas, riads, and spice markets',
     category: 'exotic',
-    coverImage: PEX(1580173),
-    coverImages: [PEX(1580173), PEX(696205), PEX(318238)],
+    coverImage: PEX(30179958),
+    coverImages: [PEX(30179958), PEX(1580173), PEX(318238)],
     duration: '5 days',
     priceFrom: '$1,199',
     days: [
@@ -464,8 +466,8 @@ export const TRIPS: Trip[] = [
     title: 'Thailand Islands',
     subtitle: 'Turquoise waters, limestone karsts, and beach parties',
     category: 'exotic',
-    coverImage: PEX(1285625),
-    coverImages: [PEX(1285625), PEX(1029450), PEX(2662116)],
+    coverImage: PEX(3355777),
+    coverImages: [PEX(3355777), PEX(6027512), PEX(20792334)],
     duration: '6 days',
     priceFrom: '$1,099',
     days: [

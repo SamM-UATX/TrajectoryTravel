@@ -1,13 +1,19 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { Trip } from '@/lib/trips-data';
+
+const FALLBACK_IMAGE = 'https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&w=1200';
 
 interface TripCardProps {
   trip: Trip;
 }
 
 export default function TripCard({ trip }: TripCardProps) {
+  const [imgSrc, setImgSrc] = useState(trip.coverImage);
+  const handleError = () => setImgSrc(FALLBACK_IMAGE);
+
   return (
     <Link
       href={`/trips/${trip.slug}`}
@@ -15,8 +21,9 @@ export default function TripCard({ trip }: TripCardProps) {
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img
-          src={trip.coverImage}
+          src={imgSrc}
           alt={trip.title}
+          onError={handleError}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
