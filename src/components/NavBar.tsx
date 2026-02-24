@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const navItems = [
-  { href: '/#home', label: 'Home', hash: 'home' },
-  { href: '/#scenic', label: 'Scenic', hash: 'scenic' },
-  { href: '/#historic', label: 'Historic', hash: 'historic' },
-  { href: '/#exotic', label: 'Exotic', hash: 'exotic' },
+  { href: '/', label: 'Home', hash: 'home' },
+  { href: '/scenic', label: 'Scenic', hash: 'scenic' },
+  { href: '/historic', label: 'Historic', hash: 'historic' },
+  { href: '/exotic', label: 'Exotic', hash: 'exotic' },
   { href: '/#custom-trip', label: 'Custom Trip', hash: 'custom-trip' },
   { href: '/#contact', label: 'Contact', hash: 'contact', accent: true },
 ];
@@ -25,39 +25,33 @@ export default function NavBar() {
   }, []);
 
   const isActive = (item: (typeof navItems)[0]) => {
-    if (pathname !== '/') return false;
-    return item.hash === hash || (item.hash === 'home' && !hash);
+    if (item.href.startsWith('/#')) return pathname === '/' && item.hash === hash;
+    return pathname === item.href;
   };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-gray/20">
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Left: Arc logo - thin sweeping line ending in solid plane, palm trees & island */}
+        {/* Left: Blue arc, light gray, gold plane, globe */}
         <Link href="/" className="flex items-center group">
-          <svg viewBox="0 0 140 50" className="h-11 w-28 text-sage-dark">
-            {/* Island silhouette (background) */}
-            <path d="M 0 50 L 0 44 Q 20 38 45 44 Q 70 36 90 44 L 100 50 Z" fill="currentColor" opacity="0.2" />
-            {/* Palm trees (subtle) */}
-            <g opacity="0.5" stroke="currentColor" strokeWidth="1" fill="none">
-              <path d="M 12 46 L 12 34 Q 12 26 18 24" strokeLinecap="round" />
-              <ellipse cx="18" cy="22" rx="3" ry="1.5" fill="currentColor" />
-              <path d="M 22 44 L 22 32 Q 22 24 28 22" strokeLinecap="round" />
-              <ellipse cx="28" cy="20" rx="3" ry="1.5" fill="currentColor" />
-            </g>
-            {/* Arc: starts thin, sweeps up */}
+          <svg viewBox="0 0 140 50" className="h-11 w-28">
+            {/* Globe - light gray circle with latitude lines */}
+            <circle cx="32" cy="25" r="18" fill="#E8E4DE" stroke="#D4CFC6" strokeWidth="1.5" />
+            <ellipse cx="32" cy="25" rx="18" ry="4" fill="none" stroke="#D4CFC6" strokeWidth="1" opacity="0.6" />
+            <ellipse cx="32" cy="25" rx="4" ry="18" fill="none" stroke="#D4CFC6" strokeWidth="1" opacity="0.6" />
+            {/* Blue arc - sweeps from globe to plane */}
             <path
-              d="M 40 46 Q 85 12 125 40"
+              d="M 50 38 Q 95 8 125 32"
               fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
+              stroke="#1E3A5F"
+              strokeWidth="2.5"
               strokeLinecap="round"
-              className="text-sage"
             />
-            {/* Solid plane at arc end */}
-            <g transform="translate(115, 34) rotate(-12)">
-              <path d="M 0 7 L 16 7 L 18 5 L 20 7 L 18 9 L 16 7" fill="currentColor" className="text-sage-dark" />
-              <path d="M 5 7 L 7 3 L 9 7 Z" fill="currentColor" className="text-sage-dark" />
-              <path d="M 11 7 L 9 11 L 13 11 Z" fill="currentColor" className="text-sage" opacity="0.9" />
+            {/* Gold plane at arc end */}
+            <g transform="translate(115, 26) rotate(-15)">
+              <path d="M 0 7 L 16 7 L 18 5 L 20 7 L 18 9 L 16 7" fill="#C9A227" stroke="#A68520" strokeWidth="0.5" />
+              <path d="M 5 7 L 7 3 L 9 7 Z" fill="#C9A227" stroke="#A68520" strokeWidth="0.5" />
+              <path d="M 11 7 L 9 11 L 13 11 Z" fill="#D4B030" stroke="#C9A227" strokeWidth="0.5" />
             </g>
           </svg>
         </Link>
@@ -85,13 +79,11 @@ export default function NavBar() {
 
       {/* Mobile menu - simplified */}
       <div className="md:hidden px-6 pb-3 flex flex-wrap gap-3">
-        {navItems.slice(0, 4).map((item) => (
-          <Link key={item.href} href={item.href} className="text-xs text-slate-gray hover:text-sage-dark">
+        {navItems.map((item) => (
+          <Link key={item.href} href={item.href} className={`text-xs hover:text-sage-dark ${item.accent ? 'font-serif italic text-ocean-breeze' : 'text-slate-gray'}`}>
             {item.label}
           </Link>
         ))}
-        <Link href="/#custom-trip" className="text-xs text-slate-gray hover:text-sage-dark">Custom Trip</Link>
-        <Link href="/#contact" className="text-xs font-serif italic text-ocean-breeze">Contact</Link>
       </div>
     </header>
   );

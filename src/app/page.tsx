@@ -4,9 +4,9 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import NavBar from '@/components/NavBar';
 import ParallaxHero from '@/components/ParallaxHero';
-import TripSection from '@/components/TripSection';
+import CategorySection from '@/components/CategorySection';
 import TripRequestForm, { TripFormData } from '@/components/TripRequestForm';
-import { getTripsByCategory } from '@/lib/trips-data';
+import { SCENIC_CAROUSEL, HISTORIC_CAROUSEL, EXOTIC_CAROUSEL } from '@/lib/category-images';
 import { Mail, MapPin, Phone } from 'lucide-react';
 
 export default function HomePage() {
@@ -38,10 +38,6 @@ export default function HomePage() {
     }
   };
 
-  const scenicTrips = getTripsByCategory('scenic');
-  const historicTrips = getTripsByCategory('historic');
-  const exoticTrips = getTripsByCategory('exotic');
-
   return (
     <div className="min-h-screen bg-cream">
       <NavBar />
@@ -49,31 +45,37 @@ export default function HomePage() {
       {/* Parallax Hawaii hero */}
       <ParallaxHero />
 
-      {/* Scenic section */}
-      <TripSection
+      {/* Scenic - relaxing, soul-healing */}
+      <CategorySection
         id="scenic"
         title="Scenic"
-        subtitle="Breathtaking landscapes, dramatic coastlines, and natural wonders"
-        trips={scenicTrips}
+        description="Relaxing, soul-healing journeys through breathtaking landscapes. Let nature restore you—dramatic coastlines, serene mountains, crystal lakes, and peaceful valleys. Perfect for unwinding and reconnecting with the world."
+        images={SCENIC_CAROUSEL}
+        href="/scenic"
+        bgClass="bg-mint-light/20"
       />
 
-      {/* Historic section */}
-      <TripSection
+      {/* Historic */}
+      <CategorySection
         id="historic"
         title="Historic"
-        subtitle="Ancient ruins, timeless architecture, and the stories of civilizations"
-        trips={historicTrips}
+        description="Walk in the footsteps of civilizations. Ancient ruins, timeless architecture, and the stories that shaped our world. From the Colosseum to the Pyramids, discover the legacy of human achievement."
+        images={HISTORIC_CAROUSEL}
+        href="/historic"
+        bgClass="bg-cloud-gray/50"
       />
 
-      {/* Exotic section */}
-      <TripSection
+      {/* Exotic - adventurous, exciting, spicy */}
+      <CategorySection
         id="exotic"
         title="Exotic"
-        subtitle="Unique cultures, volcanic islands, and unforgettable adventures"
-        trips={exoticTrips}
+        description="Adventurous, exciting, and spicy. Volcanic islands, vibrant cultures, and unforgettable thrills. From Bali to the Galápagos, experience the world at its most dynamic and alive."
+        images={EXOTIC_CAROUSEL}
+        href="/exotic"
+        bgClass="bg-mint-light/30"
       />
 
-      {/* Custom Trip CTA - scrolls to form on same page */}
+      {/* Custom Trip CTA */}
       <section id="custom-trip" className="py-16 md:py-24 bg-slate-gray/10">
         <div className="max-w-2xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-bold text-sage-dark">Custom Trip</h2>
