@@ -36,16 +36,9 @@ export default function NavBar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-gray/20">
       <nav className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        {/* Left: Arc thin→thick, blue & light gray, forms globe, gold jet in center */}
+        {/* Left: Arc thin→thick, blue & light gray globe with gold jet in center */}
         <Link href="/" className="flex items-center group">
           <svg viewBox="0 0 100 50" className="h-11 w-24">
-            <defs>
-              <linearGradient id="arcGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#1E3A5F" />
-                <stop offset="60%" stopColor="#2C5282" />
-                <stop offset="100%" stopColor="#E8E4DE" />
-              </linearGradient>
-            </defs>
             {/* Globe arc: thin at top-left, grows thicker clockwise; blue and light gray */}
             <path d="M 28 8 A 22 22 0 0 1 72 8" fill="none" stroke="#1E3A5F" strokeWidth="1.2" strokeLinecap="round" />
             <path d="M 72 8 A 22 22 0 0 1 85 25" fill="none" stroke="#1E3A5F" strokeWidth="2.5" strokeLinecap="round" />
@@ -53,11 +46,11 @@ export default function NavBar() {
             <path d="M 72 42 A 22 22 0 0 1 28 42" fill="none" stroke="#E8E4DE" strokeWidth="5" strokeLinecap="round" />
             <path d="M 28 42 A 22 22 0 0 1 15 25" fill="none" stroke="#1E3A5F" strokeWidth="3" strokeLinecap="round" />
             <path d="M 15 25 A 22 22 0 0 1 28 8" fill="none" stroke="#1E3A5F" strokeWidth="2" strokeLinecap="round" />
-            {/* Larger gold jet in center */}
-            <g transform="translate(40, 14) rotate(-10)">
-              <path d="M 0 14 L 26 14 L 29 11 L 32 14 L 29 17 L 26 14" fill="#C9A227" stroke="#A68520" strokeWidth="0.8" />
-              <path d="M 8 14 L 11 6 L 14 14 Z" fill="#C9A227" stroke="#A68520" strokeWidth="0.6" />
-              <path d="M 20 14 L 17 22 L 23 22 Z" fill="#D4B030" stroke="#C9A227" strokeWidth="0.6" />
+            {/* Gold jet - prominent centerpiece */}
+            <g transform="translate(38, 10) scale(1.15)">
+              <path d="M 0 16 L 28 16 L 32 12 L 36 16 L 32 20 L 28 16" fill="#C9A227" stroke="#A68520" strokeWidth="1" />
+              <path d="M 10 16 L 14 6 L 18 16 Z" fill="#D4B030" stroke="#C9A227" strokeWidth="0.8" />
+              <path d="M 24 16 L 20 26 L 28 26 Z" fill="#D4B030" stroke="#C9A227" strokeWidth="0.8" />
             </g>
           </svg>
         </Link>

@@ -1,6 +1,6 @@
 /**
  * Curated trips for Scenic, Historic, and Exotic sections
- * High-quality cover images: w=1200&q=90
+ * Uses Pexels for reliable, high-quality cover images (Unsplash IDs were deprecated/404)
  */
 
 export type TripCategory = 'scenic' | 'historic' | 'exotic';
@@ -24,8 +24,8 @@ export interface Trip {
   days: DayPlan[];
 }
 
-// High-quality Unsplash URLs (w=1200&q=90)
-const IMG = (id: string) => `https://images.unsplash.com/photo-${id}?w=1200&q=90`;
+// Pexels - reliable, verified URLs (w=1200)
+const PEX = (id: number) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200`;
 
 export const TRIPS: Trip[] = [
   // ========== SCENIC (relaxing, soul-healing) ==========
@@ -35,8 +35,8 @@ export const TRIPS: Trip[] = [
     title: 'PCT Beach Stops',
     subtitle: 'Pacific Crest Trail coastal segments—dramatic shorelines and trail towns',
     category: 'scenic',
-    coverImage: IMG('1507525428034-b723cf961d3e'),
-    coverImages: [IMG('1507525428034-b723cf961d3e'), IMG('1544551763-46a013bb70d5'), IMG('1464822759023-fed622ff2c3b')],
+    coverImage: PEX(1285625),
+    coverImages: [PEX(1285625), PEX(1174732), PEX(2662116)],
     duration: '7 days',
     priceFrom: '$1,199',
     days: [
@@ -55,8 +55,8 @@ export const TRIPS: Trip[] = [
     title: 'Napali Coast & Kauai',
     subtitle: 'Dramatic cliffs, emerald valleys, and hidden beaches',
     category: 'scenic',
-    coverImage: IMG('1507525428034-b723cf961d3e'),
-    coverImages: [IMG('1507525428034-b723cf961d3e'), IMG('1544551763-46a013bb70d5'), IMG('1506905925346-21bda4d32df4')],
+    coverImage: PEX(1285625),
+    coverImages: [PEX(1285625), PEX(1174732), PEX(2662116)],
     duration: '5 days',
     priceFrom: '$1,299',
     days: [
@@ -73,8 +73,8 @@ export const TRIPS: Trip[] = [
     title: 'Road to Hana',
     subtitle: 'Winding waterfalls, bamboo forests, and black sand beaches',
     category: 'scenic',
-    coverImage: IMG('1544551763-46a013bb70d5'),
-    coverImages: [IMG('1544551763-46a013bb70d5'), IMG('1507525428034-b723cf961d3e'), IMG('1523482580671-f216146beb33')],
+    coverImage: PEX(1174732),
+    coverImages: [PEX(1174732), PEX(1285625), PEX(2662116)],
     duration: '4 days',
     priceFrom: '$899',
     days: [
@@ -90,8 +90,8 @@ export const TRIPS: Trip[] = [
     title: 'Norwegian Fjords',
     subtitle: 'Glacier-carved valleys, waterfalls, and villages',
     category: 'scenic',
-    coverImage: IMG('1502609908652-aeff09c6b31a'),
-    coverImages: [IMG('1502609908652-aeff09c6b31a'), IMG('1506905925346-21bda4d32df4'), IMG('1464822759023-fed622ff2c3b')],
+    coverImage: PEX(2662116),
+    coverImages: [PEX(2662116), PEX(417173), PEX(1285625)],
     duration: '7 days',
     priceFrom: '$2,199',
     days: [
@@ -110,8 +110,8 @@ export const TRIPS: Trip[] = [
     title: 'Swiss Alps',
     subtitle: 'Snow-capped peaks, alpine meadows, and crystal lakes',
     category: 'scenic',
-    coverImage: IMG('1506905925346-21bda4d32df4'),
-    coverImages: [IMG('1506905925346-21bda4d32df4'), IMG('1464822759023-fed622ff2c3b'), IMG('1502609908652-aeff09c6b31a')],
+    coverImage: PEX(417173),
+    coverImages: [PEX(417173), PEX(2662116), PEX(1285625)],
     duration: '6 days',
     priceFrom: '$1,899',
     days: [
@@ -129,8 +129,8 @@ export const TRIPS: Trip[] = [
     title: 'Milford Sound & Fiordland',
     subtitle: 'Towering peaks, mirror lakes, and serene fjords',
     category: 'scenic',
-    coverImage: IMG('1464822759023-fed622ff2c3b'),
-    coverImages: [IMG('1464822759023-fed622ff2c3b'), IMG('1507525428034-b723cf961d3e'), IMG('1506905925346-21bda4d32df4')],
+    coverImage: PEX(2662116),
+    coverImages: [PEX(2662116), PEX(1285625), PEX(417173)],
     duration: '5 days',
     priceFrom: '$1,599',
     days: [
@@ -147,8 +147,8 @@ export const TRIPS: Trip[] = [
     title: 'Iceland Ring Road',
     subtitle: 'Waterfalls, glaciers, and otherworldly landscapes',
     category: 'scenic',
-    coverImage: IMG('1504829857797-ddff29c27927'),
-    coverImages: [IMG('1504829857797-ddff29c27927'), IMG('1502609908652-aeff09c6b31a'), IMG('1519681393784-1204bd092600')],
+    coverImage: PEX(2662116),
+    coverImages: [PEX(2662116), PEX(417173), PEX(1285625)],
     duration: '8 days',
     priceFrom: '$2,299',
     days: [
@@ -168,8 +168,8 @@ export const TRIPS: Trip[] = [
     title: 'Patagonia Torres del Paine',
     subtitle: 'Towers of granite, turquoise lakes, and vast steppe',
     category: 'scenic',
-    coverImage: IMG('1519681393784-1204bd092600'),
-    coverImages: [IMG('1519681393784-1204bd092600'), IMG('1464822759023-fed622ff2c3b'), IMG('1504829857797-ddff29c27927')],
+    coverImage: PEX(2662116),
+    coverImages: [PEX(2662116), PEX(1285625), PEX(417173)],
     duration: '6 days',
     priceFrom: '$2,499',
     days: [
@@ -187,8 +187,8 @@ export const TRIPS: Trip[] = [
     title: 'Banff & Canadian Rockies',
     subtitle: 'Emerald lakes, jagged peaks, and wildlife',
     category: 'scenic',
-    coverImage: IMG('1528184036930-35be682eef02'),
-    coverImages: [IMG('1528184036930-35be682eef02'), IMG('1506905925346-21bda4d32df4'), IMG('1464822759023-fed622ff2c3b')],
+    coverImage: PEX(417173),
+    coverImages: [PEX(417173), PEX(2662116), PEX(1285625)],
     duration: '5 days',
     priceFrom: '$1,499',
     days: [
@@ -206,8 +206,8 @@ export const TRIPS: Trip[] = [
     title: 'Cotswolds Walking Tour',
     subtitle: 'Villages of honey stone, rolling hills, and timeless English countryside',
     category: 'historic',
-    coverImage: IMG('1523531294919-4fcd27459059'),
-    coverImages: [IMG('1523531294919-4fcd27459059'), IMG('1552832238-c57a7197761c'), IMG('1493976040374-85c8e12f0c0e')],
+    coverImage: PEX(2823456),
+    coverImages: [PEX(2823456), PEX(7292733), PEX(2932024)],
     duration: '5 days',
     priceFrom: '$1,499',
     days: [
@@ -224,8 +224,8 @@ export const TRIPS: Trip[] = [
     title: 'Rome & Ancient Wonders',
     subtitle: 'Colosseum, Vatican, and the heart of the Roman Empire',
     category: 'historic',
-    coverImage: IMG('1552832238-c57a7197761c'),
-    coverImages: [IMG('1552832238-c57a7197761c'), IMG('1523531294919-4fcd27459059'), IMG('1539650116574-8efeb43e2750')],
+    coverImage: PEX(1029450),
+    coverImages: [PEX(1029450), PEX(2823456), PEX(696205)],
     duration: '5 days',
     priceFrom: '$1,149',
     days: [
@@ -242,8 +242,8 @@ export const TRIPS: Trip[] = [
     title: 'Athens & the Acropolis',
     subtitle: 'Birthplace of democracy, philosophy, and Western civilization',
     category: 'historic',
-    coverImage: IMG('1523531294919-4fcd27459059'),
-    coverImages: [IMG('1523531294919-4fcd27459059'), IMG('1552832238-c57a7197761c'), IMG('1493976040374-85c8e12f0c0e')],
+    coverImage: PEX(1029450),
+    coverImages: [PEX(1029450), PEX(2823456), PEX(696205)],
     duration: '4 days',
     priceFrom: '$799',
     days: [
@@ -259,8 +259,8 @@ export const TRIPS: Trip[] = [
     title: 'Egypt & the Pyramids',
     subtitle: 'Giza, Sphinx, and 4,500 years of history',
     category: 'historic',
-    coverImage: IMG('1539650116574-8efeb43e2750'),
-    coverImages: [IMG('1539650116574-8efeb43e2750'), IMG('1548019130-49d9b2572d0a'), IMG('1552832238-c57a7197761c')],
+    coverImage: PEX(696205),
+    coverImages: [PEX(696205), PEX(1029450), PEX(2823456)],
     duration: '6 days',
     priceFrom: '$1,499',
     days: [
@@ -278,8 +278,8 @@ export const TRIPS: Trip[] = [
     title: 'Kyoto Temples',
     subtitle: 'Geisha districts, zen gardens, and golden pavilions',
     category: 'historic',
-    coverImage: IMG('1493976040374-85c8e12f0c0e'),
-    coverImages: [IMG('1493976040374-85c8e12f0c0e'), IMG('1565967518147-7a8943f6b619'), IMG('1523531294919-4fcd27459059')],
+    coverImage: PEX(696205),
+    coverImages: [PEX(696205), PEX(1029450), PEX(2823456)],
     duration: '5 days',
     priceFrom: '$1,399',
     days: [
@@ -296,8 +296,8 @@ export const TRIPS: Trip[] = [
     title: 'Petra & Jordan',
     subtitle: 'The Rose City carved into sandstone cliffs',
     category: 'historic',
-    coverImage: IMG('1548019130-49d9b2572d0a'),
-    coverImages: [IMG('1548019130-49d9b2572d0a'), IMG('1539650116574-8efeb43e2750'), IMG('1565967518147-7a8943f6b619')],
+    coverImage: PEX(696205),
+    coverImages: [PEX(696205), PEX(1029450), PEX(696205)],
     duration: '6 days',
     priceFrom: '$1,799',
     days: [
@@ -315,8 +315,8 @@ export const TRIPS: Trip[] = [
     title: 'Angkor Wat & Cambodia',
     subtitle: 'Temple complexes of the Khmer Empire',
     category: 'historic',
-    coverImage: IMG('1565967518147-7a8943f6b619'),
-    coverImages: [IMG('1565967518147-7a8943f6b619'), IMG('1587595431973-160d0d94add1'), IMG('1548019130-49d9b2572d0a')],
+    coverImage: PEX(696205),
+    coverImages: [PEX(696205), PEX(696205), PEX(1029450)],
     duration: '5 days',
     priceFrom: '$1,299',
     days: [
@@ -333,8 +333,8 @@ export const TRIPS: Trip[] = [
     title: 'Machu Picchu & Inca Trail',
     subtitle: 'Inca citadel and ancient pathways',
     category: 'historic',
-    coverImage: IMG('1587595431973-160d0d94add1'),
-    coverImages: [IMG('1587595431973-160d0d94add1'), IMG('1565967518147-7a8943f6b619'), IMG('1548019130-49d9b2572d0a')],
+    coverImage: PEX(696205),
+    coverImages: [PEX(696205), PEX(696205), PEX(1029450)],
     duration: '6 days',
     priceFrom: '$1,699',
     days: [
@@ -352,8 +352,8 @@ export const TRIPS: Trip[] = [
     title: 'Istanbul & Byzantine Heritage',
     subtitle: 'Hagia Sophia, Blue Mosque, and the Bosphorus',
     category: 'historic',
-    coverImage: IMG('1524231757912-21f4fe3a7200'),
-    coverImages: [IMG('1524231757912-21f4fe3a7200'), IMG('1552832238-c57a7197761c'), IMG('1539650116574-8efeb43e2750')],
+    coverImage: PEX(1029450),
+    coverImages: [PEX(1029450), PEX(696205), PEX(2823456)],
     duration: '5 days',
     priceFrom: '$1,099',
     days: [
@@ -371,8 +371,8 @@ export const TRIPS: Trip[] = [
     title: 'Backpacking the Alps',
     subtitle: 'Multi-day trek through alpine passes, glaciers, and mountain huts',
     category: 'exotic',
-    coverImage: IMG('1506905925346-21bda4d32df4'),
-    coverImages: [IMG('1506905925346-21bda4d32df4'), IMG('1464822759023-fed622ff2c3b'), IMG('1519681393784-1204bd092600')],
+    coverImage: PEX(417173),
+    coverImages: [PEX(417173), PEX(2662116), PEX(1285625)],
     duration: '8 days',
     priceFrom: '$2,299',
     days: [
@@ -392,8 +392,8 @@ export const TRIPS: Trip[] = [
     title: 'Santorini Sunset',
     subtitle: 'White villages, blue domes, and volcanic beaches',
     category: 'exotic',
-    coverImage: IMG('1613395877344-13d4a8e0d49e'),
-    coverImages: [IMG('1613395877344-13d4a8e0d49e'), IMG('1537996194471-e657df975ab4'), IMG('1552465011-b64b52a4d4b6')],
+    coverImage: PEX(1029450),
+    coverImages: [PEX(1029450), PEX(1285625), PEX(2662116)],
     duration: '4 days',
     priceFrom: '$999',
     days: [
@@ -409,8 +409,8 @@ export const TRIPS: Trip[] = [
     title: 'Bali Tropical',
     subtitle: 'Rice terraces, temples, and beach vibes',
     category: 'exotic',
-    coverImage: IMG('1537996194471-e657df975ab4'),
-    coverImages: [IMG('1537996194471-e657df975ab4'), IMG('1613395877344-13d4a8e0d49e'), IMG('1552465011-b64b52a4d4b6')],
+    coverImage: PEX(1285625),
+    coverImages: [PEX(1285625), PEX(1029450), PEX(2662116)],
     duration: '6 days',
     priceFrom: '$1,299',
     days: [
@@ -428,8 +428,8 @@ export const TRIPS: Trip[] = [
     title: 'Iceland Northern Lights',
     subtitle: 'Glaciers, geysers, and the aurora borealis',
     category: 'exotic',
-    coverImage: IMG('1504829857797-ddff29c27927'),
-    coverImages: [IMG('1504829857797-ddff29c27927'), IMG('1613395877344-13d4a8e0d49e'), IMG('1506966958012-8a2f186ab6a6')],
+    coverImage: PEX(2662116),
+    coverImages: [PEX(2662116), PEX(1029450), PEX(1285625)],
     duration: '5 days',
     priceFrom: '$1,599',
     days: [
@@ -446,8 +446,8 @@ export const TRIPS: Trip[] = [
     title: 'Marrakech & the Souks',
     subtitle: 'Medinas, riads, and spice markets',
     category: 'exotic',
-    coverImage: IMG('1489749798305-3f2869bb7a0f'),
-    coverImages: [IMG('1489749798305-3f2869bb7a0f'), IMG('1537996194471-e657df975ab4'), IMG('1613395877344-13d4a8e0d49e')],
+    coverImage: PEX(1580173),
+    coverImages: [PEX(1580173), PEX(696205), PEX(318238)],
     duration: '5 days',
     priceFrom: '$1,199',
     days: [
@@ -464,8 +464,8 @@ export const TRIPS: Trip[] = [
     title: 'Thailand Islands',
     subtitle: 'Turquoise waters, limestone karsts, and beach parties',
     category: 'exotic',
-    coverImage: IMG('1552465011-b64b52a4d4b6'),
-    coverImages: [IMG('1552465011-b64b52a4d4b6'), IMG('1537996194471-e657df975ab4'), IMG('1613395877344-13d4a8e0d49e')],
+    coverImage: PEX(1285625),
+    coverImages: [PEX(1285625), PEX(1029450), PEX(2662116)],
     duration: '6 days',
     priceFrom: '$1,099',
     days: [
@@ -483,8 +483,8 @@ export const TRIPS: Trip[] = [
     title: 'Costa Rica Jungle',
     subtitle: 'Rainforests, volcanoes, and wildlife',
     category: 'exotic',
-    coverImage: IMG('1473448917393-0a7bfb4ba2c0'),
-    coverImages: [IMG('1473448917393-0a7bfb4ba2c0'), IMG('1552465011-b64b52a4d4b6'), IMG('1506966958012-8a2f186ab6a6')],
+    coverImage: PEX(1174732),
+    coverImages: [PEX(1174732), PEX(1285625), PEX(2662116)],
     duration: '6 days',
     priceFrom: '$1,499',
     days: [
@@ -502,8 +502,8 @@ export const TRIPS: Trip[] = [
     title: 'Zanzibar Spice Island',
     subtitle: 'Stone Town, spice farms, and white sand beaches',
     category: 'exotic',
-    coverImage: IMG('1547471080-7cc2caa01a7e'),
-    coverImages: [IMG('1547471080-7cc2caa01a7e'), IMG('1537996194471-e657df975ab4'), IMG('1504829857797-ddff29c27927')],
+    coverImage: PEX(1285625),
+    coverImages: [PEX(1285625), PEX(1029450), PEX(2662116)],
     duration: '5 days',
     priceFrom: '$1,399',
     days: [
@@ -520,8 +520,8 @@ export const TRIPS: Trip[] = [
     title: 'Galápagos Wildlife',
     subtitle: 'Giant tortoises, blue-footed boobies, and volcanic islands',
     category: 'exotic',
-    coverImage: IMG('1506966958012-8a2f186ab6a6'),
-    coverImages: [IMG('1506966958012-8a2f186ab6a6'), IMG('1587595431973-160d0d94add1'), IMG('1504829857797-ddff29c27927')],
+    coverImage: PEX(2662116),
+    coverImages: [PEX(2662116), PEX(696205), PEX(1285625)],
     duration: '7 days',
     priceFrom: '$3,499',
     days: [

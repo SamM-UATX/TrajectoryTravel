@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-const HAWAII_IMAGE = 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1920&q=85';
+const HAWAII_IMAGE = 'https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&w=1920';
 
 export default function ParallaxHero() {
   const [offset, setOffset] = useState(0);

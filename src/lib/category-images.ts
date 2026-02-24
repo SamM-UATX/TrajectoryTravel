@@ -1,25 +1,27 @@
 /**
- * High-quality Unsplash images for category sections (carousels)
- * Format: w=1200&q=90 for crisp display
+ * Pexels images for category sections (carousels)
+ * Scenic: beaches, mountains, fjords | Historic: Rome, Cotswolds, temples | Exotic: beaches, Morocco, mountains
  */
 
+const PEX = (id: number) => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=1200`;
+
 export const SCENIC_CAROUSEL = [
-  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&q=90',
-  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=90',
-  'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1200&q=90',
-  'https://images.unsplash.com/photo-1502609908652-aeff09c6b31a?w=1200&q=90',
+  PEX(1285625),
+  PEX(417173),
+  PEX(2662116),
+  PEX(1174732),
 ];
 
 export const HISTORIC_CAROUSEL = [
-  'https://images.unsplash.com/photo-1552832238-c57a7197761c?w=1200&q=90',
-  'https://images.unsplash.com/photo-1523531294919-4fcd27459059?w=1200&q=90',
-  'https://images.unsplash.com/photo-1539650116574-8efeb43e2750?w=1200&q=90',
-  'https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=1200&q=90',
+  PEX(696205),
+  PEX(2823456),
+  PEX(318238),
+  PEX(1745747),
 ];
 
 export const EXOTIC_CAROUSEL = [
-  'https://images.unsplash.com/photo-1613395877344-13d4a8e0d49e?w=1200&q=90',
-  'https://images.unsplash.com/photo-1587595431973-160d0d94add1?w=1200&q=90',
-  'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200&q=90',
-  'https://images.unsplash.com/photo-1504829857797-ddff29c27927?w=1200&q=90',
+  PEX(1285625),
+  PEX(696205),
+  PEX(417173),
+  PEX(1580173),
 ];
