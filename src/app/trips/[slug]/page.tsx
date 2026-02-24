@@ -23,7 +23,7 @@ export default async function TripPage({ params }: { params: { slug: string } })
       {/* Hero with sliding photo carousel */}
       <TripHeroCarousel images={heroImages} title={trip.title} alt={trip.title} />
 
-      <div className="relative -mt-32 z-20 px-6">
+      <div className="relative -mt-24 z-20 px-6">
         <div className="max-w-4xl">
           <Link
             href={`/${trip.category}`}

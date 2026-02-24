@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 
+const FALLBACK_IMAGE = 'https://images.pexels.com/photos/1285625/pexels-photo-1285625.jpeg?auto=compress&cs=tinysrgb&w=1920';
+
 interface TripHeroCarouselProps {
   images: string[];
   title: string;
@@ -10,27 +12,41 @@ interface TripHeroCarouselProps {
 
 export default function TripHeroCarousel({ images, title, alt }: TripHeroCarouselProps) {
   const [current, setCurrent] = useState(0);
+  const [loadedImages, setLoadedImages] = useState<string[]>(images);
 
   useEffect(() => {
-    const t = setInterval(() => setCurrent((c) => (c + 1) % images.length), 4000);
+    setLoadedImages(images);
+  }, [images]);
+
+  useEffect(() => {
+    const t = setInterval(() => setCurrent((c) => (c + 1) % loadedImages.length), 4000);
     return () => clearInterval(t);
-  }, [images.length]);
+  }, [loadedImages.length]);
+
+  const handleError = (index: number) => {
+    setLoadedImages((prev) => {
+      const next = [...prev];
+      next[index] = FALLBACK_IMAGE;
+      return next;
+    });
+  };
 
   return (
-    <div className="relative h-[45vh] min-h-[320px] pt-24 overflow-hidden">
-      {images.map((src, i) => (
+    <div className="relative h-[70vh] min-h-[480px] pt-20 overflow-hidden">
+      {loadedImages.map((src, i) => (
         <img
-          key={src}
+          key={`${src}-${i}`}
           src={src}
           alt={alt}
-          className={`absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-700 ${
+          onError={() => handleError(i)}
+          className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-700 ${
             i === current ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         />
       ))}
-      <div className="absolute inset-0 bg-gradient-to-t from-cream via-black/20 to-transparent z-10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/30 z-10 pointer-events-none" />
       <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2 z-20">
-        {images.map((_, i) => (
+        {loadedImages.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}
