@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -17,7 +17,8 @@ export default function NavBar() {
   const pathname = usePathname();
   const [hash, setHash] = useState('');
 
-  useEffect(() => {
+  // Sync hash on mount and on hashchange; useLayoutEffect avoids flash of wrong active state
+  useLayoutEffect(() => {
     setHash(typeof window !== 'undefined' ? window.location.hash.slice(1) : '');
     const onHashChange = () => setHash(window.location.hash.slice(1));
     window.addEventListener('hashchange', onHashChange);
@@ -25,7 +26,10 @@ export default function NavBar() {
   }, []);
 
   const isActive = (item: (typeof navItems)[0]) => {
+    // Hash links: compare pathname + hash separately (usePathname() omits hash)
     if (item.href.startsWith('/#')) return pathname === '/' && item.hash === hash;
+    // Home link: only active when at top of home page (no hash or hash === 'home')
+    if (item.href === '/' && pathname === '/') return !hash || hash === 'home';
     return pathname === item.href;
   };
 
